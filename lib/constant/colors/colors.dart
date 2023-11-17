@@ -11,4 +11,5 @@ class ColorsCollection {
   static const ErrorColor = Color(0xffda2d2d);
   static const WarningColor = Color(0xffffcc00);
   static const SuccessColor = Color(0xff33b469);
+  static const unSelectedColor = Color(0xffDCBDAD);
 }
