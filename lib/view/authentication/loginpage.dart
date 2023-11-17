@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:pos_capstone/bottomnavigationbar/bottomnavbar.dart';
 import 'package:pos_capstone/constant/button/button_collection.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textfield/textfield.dart';
@@ -60,7 +61,13 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 40),
             CustomButton(
               text: "Login",
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  // DetailPage adalah halaman yang dituju
+                  MaterialPageRoute(builder: (context) => const BottomNavBar()),
+                );
+              },
               buttonType: ButtonType.filled,
             )
           ],
