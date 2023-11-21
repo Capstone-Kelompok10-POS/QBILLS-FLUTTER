@@ -31,8 +31,12 @@ class AppTextStyles {
       GoogleFonts.openSans(fontSize: 10, fontWeight: FontWeight.w400);
   static TextStyle priceProduct =
       GoogleFonts.openSans(fontSize: 12, fontWeight: FontWeight.bold);
-  static TextStyle goodMorning =
-      GoogleFonts.openSans(fontSize: 12, fontWeight: FontWeight.w400);
-  static TextStyle userWelcome =
-      GoogleFonts.openSans(fontSize: 14, fontWeight: FontWeight.w600);
+  static TextStyle tittlestyleBlack = GoogleFonts.openSans(
+      fontSize: 12,
+      color: ColorsCollection.BlackNeutral,
+      fontWeight: FontWeight.w400);
+  static TextStyle subtitlestyleBlack = GoogleFonts.openSans(
+      fontSize: 12,
+      color: ColorsCollection.BlackNeutral,
+      fontWeight: FontWeight.w600);
 }
