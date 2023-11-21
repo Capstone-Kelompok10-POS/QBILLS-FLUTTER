@@ -21,53 +21,90 @@ class _HomePageState extends State<HomePage> {
   var idSelected = 0;
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.height);
-    print(MediaQuery.of(context).size.width);
     return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 0,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Padding(
+          padding: CustomPadding.kSidePadding,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                child: Row(children: [
+                  CircleAvatar(
+                    radius: 24,
+                    backgroundColor: ColorsCollection.unSelectedColor,
+                    backgroundImage: const AssetImage('images/aksaracoffe.png'),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Good Morning',
+                            style: AppTextStyles.tittlestyleBlack),
+                        Text('Hello, Aksara Coffee',
+                            style: AppTextStyles.subtitlestyleBlack),
+                      ])
+                ]),
+              ),
+              IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(
+                    minWidth: 24,
+                  ),
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.shopping_cart_outlined,
+                    color: ColorsCollection.BlackNeutral,
+                  ))
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 32.0,
-            ),
-            Padding(
-              padding: CustomPadding.kSidePadding,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const CircleAvatar(
-                        radius: 20,
-                        backgroundColor: ColorsCollection.unSelectedColor,
-                        backgroundImage: AssetImage('images/aksaracoffe.png'),
-                      ),
-                      const SizedBox(width: 13),
-                      Column(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment
-                                .center, // Menggeser teks ke atas
-                            children: [
-                              Text('Good Morning',
-                                  style: AppTextStyles.goodMorning),
-                              Text('Hello, Aksara Coffee',
-                                  style: AppTextStyles.userWelcome),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const Icon(
-                    Icons.shopping_cart_outlined,
-                    color: Colors.black,
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: CustomPadding.kSidePadding,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Row(
+            //         children: [
+            //           const CircleAvatar(
+            //             radius: 20,
+            //             backgroundColor: ColorsCollection.unSelectedColor,
+            //             backgroundImage: AssetImage('images/aksaracoffe.png'),
+            //           ),
+            //           const SizedBox(width: 13),
+            //           Column(
+            //             children: [
+            //               Column(
+            //                 crossAxisAlignment: CrossAxisAlignment.start,
+            //                 mainAxisAlignment: MainAxisAlignment
+            //                     .center, // Menggeser teks ke atas
+            //                 children: [
+            //                   Text('Good Morning',
+            //                       style: AppTextStyles.goodMorning),
+            //                   Text('Hello, Aksara Coffee',
+            //                       style: AppTextStyles.userWelcome),
+            //                 ],
+            //               ),
+            //             ],
+            //           ),
+            //         ],
+            //       ),
+            //       const Icon(
+            //         Icons.shopping_cart_outlined,
+            //         color: Colors.black,
+            //       ),
+            //     ],
+            //   ),
+            // ),
             const SizedBox(height: 24.0),
             Padding(
               padding: CustomPadding.kSidePadding,
