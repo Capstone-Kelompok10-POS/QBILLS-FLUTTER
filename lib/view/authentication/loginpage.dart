@@ -8,7 +8,7 @@ import 'package:pos_capstone/constant/textfield/textfield.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -17,7 +17,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _UserController = TextEditingController();
   final TextEditingController _PasswordController = TextEditingController();
-  final bool _isHidden = true;
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +45,12 @@ class _LoginPageState extends State<LoginPage> {
                 textFieldType: TextFieldType.outlined),
             const SizedBox(height: 16),
             CustomTextField(
-              obscureText: _isHidden,
               prefixIcon: Icons.lock,
               suffixIcon: Icons.visibility,
               hintText: "Password",
               controller: _PasswordController,
               textFieldType: TextFieldType.outlined,
-              onVisibilityToggle: (bool isHidden) {
-                setState(() {
-                  isHidden = !isHidden;
-                });
-              },
+              onVisibilityToggle: (bool isHidden) {},
             ),
             const SizedBox(height: 40),
             CustomButton(

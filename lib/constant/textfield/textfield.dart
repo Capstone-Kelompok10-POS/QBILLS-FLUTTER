@@ -29,6 +29,7 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
+  bool _isHidden = true;
   @override
   Widget build(BuildContext context) {
     return widget.textFieldType == TextFieldType.outlined
@@ -40,11 +41,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextField(
       cursorColor: ColorsCollection.BlackNeutral,
       controller: widget.controller,
-      obscureText: widget.obscureText,
+      obscureText: _isHidden,
       decoration: InputDecoration(
         prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
         prefixIconColor: ColorsCollection.GreyNeutral,
-        suffixIcon: widget.suffixIcon != null ? Icon(widget.suffixIcon) : null,
+        suffixIcon: widget.suffixIcon != null
+            ? GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isHidden = !_isHidden;
+                  });
+                },
+                child: Icon(_isHidden == true
+                    ? Icons.visibility
+                    : Icons.visibility_off),
+              )
+            : null,
         suffixIconColor: ColorsCollection.GreyNeutral,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
