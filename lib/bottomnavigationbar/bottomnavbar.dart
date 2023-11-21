@@ -29,25 +29,35 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return Scaffold(
       body: screen[_selectedIndex],
       bottomNavigationBar: SizedBox(
-        height: 74,
+        height: 58,
         child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           child: BottomNavigationBar(
-            selectedFontSize: 14,
+            selectedFontSize: 10,
             backgroundColor: ColorsCollection.PrimaryColor,
-            unselectedFontSize: 14,
+            unselectedFontSize: 10,
             currentIndex: _selectedIndex,
             onTap: _onItemTapped,
             selectedItemColor: ColorsCollection.WhiteNeutral,
             unselectedItemColor: ColorsCollection.unSelectedColor,
             items: const [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.local_cafe), label: 'Produk'),
+                  icon: Padding(
+                    padding: EdgeInsets.only(bottom: 4),
+                    child: Icon(Icons.local_cafe, size: 20),
+                  ),
+                  label: 'Product'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.leaderboard_outlined), label: 'Report'),
+                  icon: Padding(
+                    padding: EdgeInsets.only(bottom: 4),
+                    child: Icon(Icons.leaderboard_outlined, size: 20),
+                  ),
+                  label: 'Order'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.local_police_outlined), label: 'Membership'),
+                  icon: Padding(
+                    padding: EdgeInsets.only(bottom: 4),
+                    child: Icon(Icons.local_police_outlined, size: 20),
+                  ),
+                  label: 'Member'),
             ],
           ),
         ),

@@ -12,4 +12,5 @@ class ColorsCollection {
   static const WarningColor = Color(0xffffcc00);
   static const SuccessColor = Color(0xff33b469);
   static const unSelectedColor = Color(0xffDCBDAD);
+  static const BoxCard = Color(0xFFF4F4F4);
 }
