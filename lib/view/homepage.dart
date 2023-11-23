@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         titleSpacing: 0,
         automaticallyImplyLeading: false,
@@ -34,10 +35,10 @@ class _HomePageState extends State<HomePage> {
             children: [
               SizedBox(
                 child: Row(children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 24,
                     backgroundColor: ColorsCollection.unSelectedColor,
-                    backgroundImage: const AssetImage('images/aksaracoffe.png'),
+                    backgroundImage: AssetImage('images/aksaracoffe.png'),
                   ),
                   const SizedBox(width: 12),
                   Column(
@@ -52,11 +53,11 @@ class _HomePageState extends State<HomePage> {
               ),
               IconButton(
                   padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     minWidth: 24,
                   ),
                   onPressed: () {},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.shopping_cart_outlined,
                     color: ColorsCollection.BlackNeutral,
                   ))
@@ -198,113 +199,114 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: CustomPadding.kSidePadding,
-              child: Container(
+              child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.7,
-                child: Expanded(
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio:
-                          MediaQuery.of(context).size.width * 0.0019,
-                    ),
-                    itemBuilder: (context, index) {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: Padding(
-                          padding: CustomPadding.kTopCardPadding,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.095,
-                                child: Container(
-                                  padding: CustomPadding
-                                      .kInsideBoxCardPadding, // Jarak atas bawah
-                                  margin: CustomPadding.kSideBoxCardPadding,
-                                  decoration: BoxDecoration(
-                                    color: ColorsCollection.BoxCard,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Image.asset(
-                                    'images/cappucinoespreso.png',
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    fit: BoxFit.fill,
-                                  ),
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio:
+                        // MediaQuery.of(context).size.width * 0.0019,
+                        MediaQuery.of(context).size.width * 0.0016,
+                  ),
+                  itemBuilder: (context, index) {
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: Padding(
+                        padding: CustomPadding.kTopCardPadding,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height:
+                                  // MediaQuery.of(context).size.height * 0.095,
+                                  MediaQuery.of(context).size.height * 0.15,
+                              child: Container(
+                                padding: CustomPadding
+                                    .kInsideBoxCardPadding, // Jarak atas bawah
+                                margin: CustomPadding.kSideBoxCardPadding,
+                                decoration: BoxDecoration(
+                                  color: ColorsCollection.BoxCard,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Image.asset(
+                                  'images/cappucinoespreso.png',
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                              const SizedBox(height: 8),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: CustomPadding.kSideCardPadding,
-                                    child: Text(
-                                      'Cappucino Espresso',
-                                      style: AppTextStyles.titleProduct,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
+                            ),
+                            const SizedBox(height: 8),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: CustomPadding.kSideCardPadding,
+                                  child: Text(
+                                    'Cappucino Espresso',
+                                    style: AppTextStyles.titleProduct,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: CustomPadding.kSideCardPadding,
+                                  child: Text(
+                                    'coffee from espresso, steamed milk, & milk foam',
+                                    style: AppTextStyles.descriptionProduct,
+                                    // overflow: TextOverflow.ellipsis,
+                                    // maxLines: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: CustomPadding.kSideCardPadding,
+                                  child: Text(
+                                    'Rp 26.000',
+                                    style: AppTextStyles.priceProduct,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: CustomPadding.kSideCardPadding,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 35,
+                                    height: 35,
+                                    padding: const EdgeInsets.all(0),
+                                    decoration: BoxDecoration(
+                                      color: ColorsCollection.PrimaryColor,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: const Icon(
+                                      Icons.chevron_right_outlined,
+                                      color: Colors.white,
                                     ),
                                   ),
-                                  Padding(
-                                    padding: CustomPadding.kSideCardPadding,
-                                    child: Text(
-                                      'coffee from espresso, steamed milk, & milk foam',
-                                      style: AppTextStyles.descriptionProduct,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: CustomPadding.kSideCardPadding,
-                                    child: Text(
-                                      'Rp 26.000',
-                                      style: AppTextStyles.priceProduct,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: CustomPadding.kSideCardPadding,
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      width: 35,
-                                      height: 35,
-                                      padding: const EdgeInsets.all(0),
-                                      decoration: BoxDecoration(
-                                        color: ColorsCollection.PrimaryColor,
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      child: const Icon(
-                                        Icons.chevron_right_outlined,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
+            const SizedBox(height: 40.0),
           ],
         ),
       ),
