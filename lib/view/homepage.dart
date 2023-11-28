@@ -13,12 +13,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final listChoices = <ItemChoice>[
-    ItemChoice(1, 'Coffee', Icons.local_cafe),
+    ItemChoice(1, 'Coffee', Icons.local_cafe_outlined),
     ItemChoice(2, 'Non Coffee', Icons.local_drink),
     ItemChoice(3, 'Meals', Icons.restaurant),
     ItemChoice(4, 'Snack', Icons.fastfood),
   ];
-  var idSelected = 0;
+  var idSelected = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,43 +69,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Padding(
-            //   padding: CustomPadding.kSidePadding,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Row(
-            //         children: [
-            //           const CircleAvatar(
-            //             radius: 20,
-            //             backgroundColor: ColorsCollection.unSelectedColor,
-            //             backgroundImage: AssetImage('images/aksaracoffe.png'),
-            //           ),
-            //           const SizedBox(width: 13),
-            //           Column(
-            //             children: [
-            //               Column(
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 mainAxisAlignment: MainAxisAlignment
-            //                     .center, // Menggeser teks ke atas
-            //                 children: [
-            //                   Text('Good Morning',
-            //                       style: AppTextStyles.goodMorning),
-            //                   Text('Hello, Aksara Coffee',
-            //                       style: AppTextStyles.userWelcome),
-            //                 ],
-            //               ),
-            //             ],
-            //           ),
-            //         ],
-            //       ),
-            //       const Icon(
-            //         Icons.shopping_cart_outlined,
-            //         color: Colors.black,
-            //       ),
-            //     ],
-            //   ),
-            // ),
             const SizedBox(height: 24.0),
             Padding(
               padding: CustomPadding.kSidePadding,
@@ -161,9 +124,7 @@ class _HomePageState extends State<HomePage> {
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             labelPadding: const EdgeInsets.only(left: 4),
                             avatar: Icon(
-                              idSelected == e.id
-                                  ? Icons.close_outlined
-                                  : e.avataricon,
+                              idSelected == e.id ? e.avataricon : e.avataricon,
                               color: idSelected == e.id
                                   ? ColorsCollection.WhiteNeutral
                                   : ColorsCollection.GreyNeutral,

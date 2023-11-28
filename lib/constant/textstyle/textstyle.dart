@@ -39,4 +39,16 @@ class AppTextStyles {
       fontSize: 12,
       color: ColorsCollection.BlackNeutral,
       fontWeight: FontWeight.w600);
+  static TextStyle redStyleText = GoogleFonts.openSans(
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+      color: ColorsCollection.ErrorColor);
+  static TextStyle titleProductOutOFStock = GoogleFonts.openSans(
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+      color: ColorsCollection.GreyNeutral);
+  static TextStyle descriptionProductOutOfStock = GoogleFonts.openSans(
+      fontSize: 10,
+      fontWeight: FontWeight.w400,
+      color: ColorsCollection.GreyNeutral);
 }
