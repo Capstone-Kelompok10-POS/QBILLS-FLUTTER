@@ -58,5 +58,5 @@ class AppTextStyles {
   static TextStyle userWelcome =
       GoogleFonts.openSans(fontSize: 14, fontWeight: FontWeight.w600);
   static TextStyle labelStyleButton =
-      GoogleFonts.openSans(fontSize: 12, color: ColorsCollection.WhiteNeutral);
+      GoogleFonts.openSans(fontSize: 12, color: ColorsCollection.WhiteNeutral);  
 }
