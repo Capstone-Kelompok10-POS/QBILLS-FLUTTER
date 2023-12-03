@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
+import 'package:pos_capstone/view/cart/cartitem.dart';
 import 'package:pos_capstone/view/chip/model.dart';
 import 'package:pos_capstone/view/detailproduct/productdetail.dart';
 
@@ -85,7 +86,13 @@ class _HomePageState extends State<HomePage> {
                       constraints: const BoxConstraints(
                         minWidth: 24,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CartItem()),
+                        );
+                      },
                       icon: const Icon(
                         Icons.shopping_cart_outlined,
                         color: ColorsCollection.BlackNeutral,

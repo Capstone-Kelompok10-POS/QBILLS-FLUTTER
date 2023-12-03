@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pos_capstone/view/cart/cartitem.dart';
+import 'package:pos_capstone/view/homepage.dart';
 
 class ViewDetail extends StatefulWidget {
   const ViewDetail({super.key});
@@ -290,12 +291,7 @@ class _ViewDetailState extends State<ViewDetail> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CartItem()),
-                    );
-                  },
+                  onPressed: () {},
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
