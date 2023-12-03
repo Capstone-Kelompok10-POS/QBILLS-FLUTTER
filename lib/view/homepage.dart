@@ -3,6 +3,7 @@ import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
 import 'package:pos_capstone/view/chip/model.dart';
+import 'package:pos_capstone/view/detailproduct/productdetail.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -253,7 +254,14 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ViewDetail()),
+                                      );
+                                    },
                                     child: Container(
                                       height: 40,
                                       width: 40,
