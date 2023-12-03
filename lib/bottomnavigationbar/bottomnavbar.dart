@@ -3,6 +3,7 @@ import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
 
 import 'package:pos_capstone/view/homepage.dart';
+import 'package:pos_capstone/view/reportpage/report.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -16,6 +17,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final screen = [
     const HomePage(),
+    const ReportPage(),
   ];
 
   void _onItemTapped(int index) {
