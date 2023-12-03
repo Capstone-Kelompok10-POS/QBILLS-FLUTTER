@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:pos_capstone/constant/colors/colors.dart';
+import 'package:pos_capstone/constant/padding/padding_collection.dart';
 
 class CartItem extends StatefulWidget {
   const CartItem({super.key});
@@ -8,6 +11,16 @@ class CartItem extends StatefulWidget {
 }
 
 class _CartItemState extends State<CartItem> {
+  int? _selectedPaymentMethod;
+  int? _selectedBank;
+  double _bottomSheetHeight = 0.5;
+
+  void _updateBottomSheetHeight(double height) {
+    setState(() {
+      _bottomSheetHeight = height;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -396,7 +409,374 @@ class _CartItemState extends State<CartItem> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return SingleChildScrollView(
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(16),
+                                topRight: Radius.circular(16),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 1,
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Center(
+                                  child: SvgPicture.asset(
+                                    'images/Rectangle3679.svg',
+                                    width: 53,
+                                    height: 4,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Payment Method',
+                                  // style: AppTextStyles.headerPayment,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Please fill in the nominal value correctly',
+                                  // style: AppTextStyles.subnPayment,
+                                ),
+                                const SizedBox(height: 20),
+                                ListTile(
+                                  leading: const Icon(Icons.money_outlined,
+                                      color: ColorsCollection.BlackNeutral),
+                                  title: Text(
+                                    'Cash',
+                                    // style: AppTextStyles.subnPaymentChoose,
+                                  ),
+                                  trailing: Radio(
+                                    focusColor: ColorsCollection.GreyNeutral,
+                                    value: 1,
+                                    groupValue: _selectedPaymentMethod,
+                                    onChanged: (int? value) {
+                                      setState(() {
+                                        _selectedPaymentMethod = value;
+                                      });
+                                    },
+                                    activeColor: ColorsCollection.PrimaryColor,
+                                  ),
+                                ),
+                                const Divider(
+                                  indent: 20,
+                                  endIndent: 20,
+                                ),
+                                ListTile(
+                                  leading: const Icon(
+                                    Icons.attach_file_outlined,
+                                    color: ColorsCollection.BlackNeutral,
+                                  ),
+                                  title: Text(
+                                    'QRIS',
+                                    // style: AppTextStyles.subnPaymentChoose,
+                                  ),
+                                  trailing: Radio(
+                                    value: 2,
+                                    groupValue: _selectedPaymentMethod,
+                                    onChanged: (int? value) {
+                                      setState(() {
+                                        _selectedPaymentMethod = value;
+                                      });
+                                    },
+                                    activeColor: ColorsCollection.PrimaryColor,
+                                  ),
+                                ),
+                                const Divider(
+                                  indent: 20,
+                                  endIndent: 20,
+                                ),
+                                Column(
+                                  children: [
+                                    ExpansionTile(
+                                      textColor: ColorsCollection.BlackNeutral,
+                                      iconColor: ColorsCollection.GreyNeutral,
+                                      collapsedIconColor:
+                                          ColorsCollection.GreyNeutral,
+                                      leading: const Icon(
+                                          Icons.payment_outlined,
+                                          color: ColorsCollection.BlackNeutral),
+                                      title: Text(
+                                        'Transfer Bank',
+                                        // style: AppTextStyles.subnPaymentChoose,
+                                      ),
+                                      trailing: IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.expand_more_outlined,
+                                          color: ColorsCollection.GreyNeutral,
+                                        ),
+                                      ),
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 52, right: 20),
+                                          child: Column(
+                                            children: [
+                                              ListTile(
+                                                leading: SvgPicture.asset(
+                                                  'images/bca.svg',
+                                                ),
+                                                title: Text(
+                                                  'Bank BCA',
+                                                  // style:
+                                                  // AppTextStyles.subnPaymentBank,
+                                                ),
+                                                trailing: Radio(
+                                                  value: 1,
+                                                  groupValue: _selectedBank,
+                                                  onChanged: (int? value) {
+                                                    setState(() {
+                                                      _selectedBank = value;
+                                                    });
+                                                  },
+                                                  activeColor: ColorsCollection
+                                                      .PrimaryColor,
+                                                ),
+                                              ),
+                                              const Divider(
+                                                thickness: 1,
+                                                height: 10,
+                                                indent: 20,
+                                                endIndent: 20,
+                                              ),
+                                              ListTile(
+                                                leading: SvgPicture.asset(
+                                                  'images/mandiri.svg',
+                                                ),
+                                                title: Text(
+                                                  'Bank Mandiri',
+                                                  // style:
+                                                  // AppTextStyles.subnPaymentBank,
+                                                ),
+                                                trailing: Radio(
+                                                  value: 2,
+                                                  groupValue: _selectedBank,
+                                                  onChanged: (int? value) {
+                                                    setState(() {
+                                                      _selectedBank = value;
+                                                    });
+                                                  },
+                                                  activeColor: ColorsCollection
+                                                      .PrimaryColor,
+                                                ),
+                                              ),
+                                              const Divider(
+                                                thickness: 1,
+                                                height: 10,
+                                                indent: 20,
+                                                endIndent: 20,
+                                              ),
+                                              ListTile(
+                                                leading: Image.asset(
+                                                    'images/permata.png'),
+                                                title: Text(
+                                                  'Bank Permata',
+                                                  // style:
+                                                  // AppTextStyles.subnPaymentBank,
+                                                ),
+                                                trailing: Radio(
+                                                  value: 3,
+                                                  groupValue: _selectedBank,
+                                                  onChanged: (int? value) {
+                                                    setState(() {
+                                                      _selectedBank = value;
+                                                    });
+                                                  },
+                                                  activeColor: ColorsCollection
+                                                      .PrimaryColor,
+                                                ),
+                                              ),
+                                              const Divider(
+                                                thickness: 1,
+                                                height: 10,
+                                                indent: 20,
+                                                endIndent: 20,
+                                              ),
+                                              ListTile(
+                                                leading: Image.asset(
+                                                    'images/bankbni.png'),
+                                                title: Text(
+                                                  'Bank BNI',
+                                                  // style:
+                                                  // AppTextStyles.subnPaymentBank,
+                                                ),
+                                                trailing: Radio(
+                                                  value: 4,
+                                                  groupValue: _selectedBank,
+                                                  onChanged: (int? value) {
+                                                    setState(() {
+                                                      _selectedBank = value;
+                                                    });
+                                                  },
+                                                  activeColor: ColorsCollection
+                                                      .PrimaryColor,
+                                                ),
+                                              ),
+                                              const Divider(
+                                                thickness: 1,
+                                                height: 10,
+                                                indent: 20,
+                                                endIndent: 20,
+                                              ),
+                                              ListTile(
+                                                leading: SvgPicture.asset(
+                                                    'images/bri.svg'),
+                                                title: Text(
+                                                  'Bank BRI',
+                                                  // style:
+                                                  // AppTextStyles.subnPaymentBank,
+                                                ),
+                                                trailing: Radio(
+                                                  value: 5,
+                                                  groupValue: _selectedBank,
+                                                  onChanged: (int? value) {
+                                                    setState(() {
+                                                      _selectedBank = value;
+                                                    });
+                                                  },
+                                                  activeColor: ColorsCollection
+                                                      .PrimaryColor,
+                                                ),
+                                              ),
+                                              const Divider(
+                                                thickness: 1,
+                                                height: 10,
+                                                indent: 20,
+                                                endIndent: 20,
+                                              ),
+                                              ListTile(
+                                                leading: Image.asset(
+                                                    'images/cimb.png'),
+                                                title: Text(
+                                                  'Bank CIMB',
+                                                  // style:
+                                                  //     AppTextStyles.subnPaymentBank,
+                                                ),
+                                                trailing: Radio(
+                                                  value: 6,
+                                                  groupValue: _selectedBank,
+                                                  onChanged: (int? value) {
+                                                    setState(() {
+                                                      _selectedBank = value;
+                                                    });
+                                                  },
+                                                  activeColor: ColorsCollection
+                                                      .PrimaryColor,
+                                                ),
+                                              ),
+                                              const Divider(
+                                                thickness: 1,
+                                                height: 10,
+                                                indent: 20,
+                                                endIndent: 20,
+                                              ),
+                                              ListTile(
+                                                leading: const Icon(Icons
+                                                    .account_balance_outlined),
+                                                title: Text(
+                                                  'Other Bank',
+                                                  // style:
+                                                  //     AppTextStyles.subnPaymentBank,
+                                                ),
+                                                trailing: Radio(
+                                                  value: 7,
+                                                  groupValue: _selectedBank,
+                                                  onChanged: (int? value) {
+                                                    setState(() {
+                                                      _selectedBank = value;
+                                                    });
+                                                  },
+                                                  activeColor: ColorsCollection
+                                                      .PrimaryColor,
+                                                ),
+                                              ),
+                                              const Divider(
+                                                thickness: 1,
+                                                height: 10,
+                                                indent: 20,
+                                                endIndent: 20,
+                                              ),
+                                              // ... (tambahkan ListTile untuk bank lainnya)
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                      onExpansionChanged: (isExpanded) {
+                                        setState(() {
+                                          if (isExpanded) {
+                                            double maxHeight =
+                                                MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.5; // Tinggi default
+                                            // Sesuaikan dengan jumlah item yang sebenarnya
+                                            maxHeight += 10 *
+                                                2; // Sesuaikan dengan jumlah item yang sebenarnya
+                                            _updateBottomSheetHeight(maxHeight);
+                                          } else {
+                                            _updateBottomSheetHeight(
+                                                MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.5); // Tinggi default
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Padding(
+                                  padding: CustomPadding.kSidePadding,
+                                  child: ElevatedButton(
+                                    onPressed: () {},
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              ColorsCollection.PrimaryColor),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      minimumSize: MaterialStateProperty.all(
+                                        Size(
+                                          double.infinity,
+                                          MediaQuery.of(context).size.height *
+                                              0.05,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Choose',
+                                      // style: AppTextStyles.buttonPayment,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
                   child: const Text(
                     'Order',
                     style: TextStyle(
