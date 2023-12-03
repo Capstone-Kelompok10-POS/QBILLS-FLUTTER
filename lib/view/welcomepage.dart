@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pos_capstone/constant/button/button_collection.dart';
+import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
 import 'package:pos_capstone/view/authentication/loginpage.dart';
@@ -11,6 +12,7 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorsCollection.WhiteNeutral,
       body: Center(
         child: Padding(
           padding: CustomPadding.kSidePadding,

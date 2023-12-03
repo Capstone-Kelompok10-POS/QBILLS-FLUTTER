@@ -44,8 +44,8 @@ flutter_native_splash :
   ios: true
   web: false
 
-  color: "#ffffff"
-  image: "images/logo.png"
+  color: "#BE8465"
+  image: "images/logowhite.png"
 
 
 
