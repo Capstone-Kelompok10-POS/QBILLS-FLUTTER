@@ -20,21 +20,23 @@ class CustomTextField extends StatefulWidget {
   final FormFieldValidator<String>? validator;
   final CustomTextFieldType fieldType;
   final bool isPassword;
+  final FormFieldSetter<String>? onSaved;
 
-  const CustomTextField({
-    Key? key,
-    required this.controller,
-    required this.hintText,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.obscureText = false,
-    this.keyboardType = TextInputType.text,
-    this.textInputAction,
-    this.onSubmitted,
-    this.validator,
-    this.fieldType = CustomTextFieldType.outlined,
-    this.isPassword = false,
-  }) : super(key: key);
+  const CustomTextField(
+      {Key? key,
+      required this.controller,
+      required this.hintText,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.obscureText = false,
+      this.keyboardType = TextInputType.text,
+      this.textInputAction,
+      this.onSubmitted,
+      this.validator,
+      this.fieldType = CustomTextFieldType.outlined,
+      this.isPassword = false,
+      this.onSaved})
+      : super(key: key);
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -48,6 +50,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     switch (widget.fieldType) {
       case CustomTextFieldType.outlined:
         return TextFormField(
+          onSaved: widget.onSaved,
           controller: widget.controller,
           obscureText: widget.obscureText,
           keyboardType: widget.keyboardType,
@@ -84,6 +87,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         );
       case CustomTextFieldType.filled:
         return TextFormField(
+          onSaved: widget.onSaved,
           controller: widget.controller,
           obscureText: widget.obscureText,
           keyboardType: widget.keyboardType,
@@ -122,6 +126,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         );
       case CustomTextFieldType.withIcon:
         return TextFormField(
+          onSaved: widget.onSaved,
           controller: widget.controller,
           obscureText: widget.isPassword ? !isHidden : widget.obscureText,
           keyboardType: widget.keyboardType,
