@@ -38,14 +38,15 @@ dependencies:
   flutter_native_splash: ^2.3.5
   google_fonts: ^6.1.0
   flutter_svg: ^2.0.9
+  http: ^1.1.0
 
 flutter_native_splash :
   android: true
   ios: true
   web: false
 
-  color: "#ffffff"
-  image: "images/logo.png"
+  color: "#BE8465"
+  image: "images/logowhite.png"
 
 
 

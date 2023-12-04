@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
+import 'package:pos_capstone/constant/textstyle/textstyle.dart';
+
 import 'package:pos_capstone/view/homepage.dart';
-import 'package:pos_capstone/view/report.dart';
+import 'package:pos_capstone/view/reportpage/report.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -15,7 +17,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final screen = [
     const HomePage(),
-    const TeSTING(),
+    const ReportPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -32,6 +34,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
         height: 58,
         child: ClipRRect(
           child: BottomNavigationBar(
+            selectedLabelStyle: AppTextStyles.labelStyleButton,
+            unselectedLabelStyle: AppTextStyles.labelStyleButton,
             selectedFontSize: 10,
             backgroundColor: ColorsCollection.PrimaryColor,
             unselectedFontSize: 10,
@@ -41,22 +45,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
             unselectedItemColor: ColorsCollection.unSelectedColor,
             items: const [
               BottomNavigationBarItem(
-                  icon: Padding(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Icon(Icons.local_cafe, size: 20),
-                  ),
-                  label: 'Product'),
+                  icon: Icon(Icons.local_cafe, size: 24), label: 'Product'),
               BottomNavigationBarItem(
-                  icon: Padding(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Icon(Icons.leaderboard_outlined, size: 20),
-                  ),
-                  label: 'Order'),
+                icon: Icon(Icons.leaderboard_outlined, size: 24),
+                label: 'Report',
+              ),
               BottomNavigationBarItem(
-                  icon: Padding(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Icon(Icons.local_police_outlined, size: 20),
-                  ),
+                  icon: Icon(Icons.local_police_outlined, size: 24),
                   label: 'Member'),
             ],
           ),

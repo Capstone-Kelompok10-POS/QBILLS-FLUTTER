@@ -6,6 +6,7 @@ class ColorsCollection {
   static const BlackNeutral = Color(0xff191919);
   static const WhiteNeutral = Color(0xffffffff);
   static const GreyNeutral = Color(0xff999999);
+  static const GreyNeutral02 = Color(0xffE6E6E6);
   static const PrimaryColor = Color(0xffbe8465);
   static const InfoColor = Color(0xff2f80ed);
   static const ErrorColor = Color(0xffda2d2d);
