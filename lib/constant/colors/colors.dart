@@ -14,4 +14,6 @@ class ColorsCollection {
   static const SuccessColor = Color(0xff33b469);
   static const unSelectedColor = Color(0xffDCBDAD);
   static const BoxCard = Color(0xFFF4F4F4);
+  static const BlackNeutral06 = Color(0xFF4C4C4C);
+  static const Brown = Color(0xFF865439);
 }

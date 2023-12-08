@@ -1,51 +1,30 @@
 // ignore_for_file: non_constant_identifier_names
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:pos_capstone/bottomnavigationbar/bottomnavbar.dart';
 import 'package:pos_capstone/constant/button/button_collection.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textfield/textfield.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
-import 'package:pos_capstone/view/authentication/viewmodel.dart';
+import 'package:pos_capstone/view/authentication/service/services.dart';
 import 'package:pos_capstone/view/homepage.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  String responseText = '';
-
-  Future<void> login() async {
-    String username = usernameController.text;
-    String password = passwordController.text;
-
-    try {
-      var responseData = await APIService.login(username, password);
-      setState(() {
-        responseText = 'Login berhasil: $responseData';
-      });
-
-      // ignore: use_build_context_synchronously
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const BottomNavBar()),
-      );
-    } catch (error) {
-      setState(() {
-        responseText = '$error';
-      });
-    }
-  }
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
         backgroundColor: ColorsCollection.WhiteNeutral,
         resizeToAvoidBottomInset: false,
@@ -72,37 +51,61 @@ class _LoginPageState extends State<LoginPage> {
                       Text("Sign in to continue",
                           style: AppTextStyles.subtitleStyle),
                       const SizedBox(height: 30),
-                      Form(
-                        child: CustomTextField(
-                          controller: usernameController,
-                          hintText: "Username",
-                          fieldType: CustomTextFieldType.withIcon,
-                          prefixIcon: Icons.person,
-                        ),
+                      CustomTextField(
+                        controller: usernameController,
+                        hintText: "Username",
+                        fieldType: CustomTextFieldType.withIcon,
+                        prefixIcon: Icons.person,
                       ),
                       const SizedBox(height: 16),
-                      Form(
-                        child: CustomTextField(
-                          obscureText: true,
-                          controller: passwordController,
-                          hintText: "Password",
-                          fieldType: CustomTextFieldType.withIcon,
-                          prefixIcon: Icons.lock_outline,
-                          suffixIcon: Icons.visibility,
-                          isPassword: true,
-                        ),
+                      CustomTextField(
+                        obscureText: true,
+                        controller: passwordController,
+                        hintText: "Password",
+                        fieldType: CustomTextFieldType.withIcon,
+                        prefixIcon: Icons.lock_outline,
+                        suffixIcon: Icons.visibility,
+                        isPassword: true,
                       ),
                       const SizedBox(height: 40),
                       CustomButton(
                         text: "Login",
-                        onPressed: login,
+                        onPressed: () async {
+                          final username = usernameController.text;
+                          final password = passwordController.text;
+                          final user =
+                              await authProvider.login(username, password);
+                          if (user != null) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()),
+                            );
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Login Gagal'),
+                                  content: const Text(
+                                      'Username atau password tidak valid.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
                         buttonType: ButtonType.filled,
                       ),
-                      const SizedBox(height: 20.0),
-                      // Text(
-                      //   responseText,
-                      //   style: const TextStyle(fontSize: 16.0),
-                      // ),
                       const SizedBox(height: 20),
                       Center(
                         child: InkWell(

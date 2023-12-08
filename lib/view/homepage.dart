@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
+import 'package:pos_capstone/view/authentication/loginpage.dart';
+import 'package:pos_capstone/view/authentication/service/services.dart';
 import 'package:pos_capstone/view/cart/cartitem.dart';
 import 'package:pos_capstone/view/chip/model.dart';
-import 'package:pos_capstone/view/detailproduct/productdetail.dart';
+import 'package:pos_capstone/view/dashboard.dart';
+import 'package:pos_capstone/view/membership/membership_details.dart';
+import 'package:pos_capstone/view/membership/membership_list.dart';
 import 'package:pos_capstone/view/reportpage/report.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,10 +22,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   final screen = [
-    const HomePage(),
+    const DashboardPage(),
     const ReportPage(),
+    const MembershipListPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -35,7 +43,7 @@ class _HomePageState extends State<HomePage> {
     ItemChoice(4, 'Snack', Icons.fastfood),
   ];
   var idSelected = 1;
-  GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -54,294 +62,374 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         key: _drawerKey,
         backgroundColor: ColorsCollection.WhiteNeutral,
-        appBar: AppBar(
-          toolbarHeight: 210,
-          titleSpacing: 0,
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: Column(
+        appBar: _selectedIndex == 0
+            ? AppBar(
+                toolbarHeight: 210,
+                titleSpacing: 0,
+                automaticallyImplyLeading: false,
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                title: Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: CustomPadding.kSidePadding,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            child: Row(children: [
+                              Builder(
+                                builder: (BuildContext context) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Scaffold.of(context).openDrawer();
+                                    },
+                                    child: const CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor:
+                                          ColorsCollection.unSelectedColor,
+                                      backgroundImage:
+                                          AssetImage('images/aksaracoffe.png'),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Good Morning',
+                                        style:
+                                            AppTextStyles.subtitleStyleBlack),
+                                    Text('Hello, Aksara Coffee',
+                                        style: AppTextStyles.titleStyleBlack),
+                                  ])
+                            ]),
+                          ),
+                          IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(
+                                minWidth: 24,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const CartItems()),
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.shopping_cart_outlined,
+                                color: ColorsCollection.BlackNeutral,
+                              ))
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Padding(
+                      padding: CustomPadding.kSidePadding,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          hintStyle: AppTextStyles.hintTextSearch,
+                          isDense: true,
+                          border: InputBorder.none,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(
+                                color: ColorsCollection.GreyNeutral),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(
+                                color: ColorsCollection.GreyNeutral),
+                          ),
+                          suffixIcon: const Icon(
+                            Icons.search,
+                            size: 24,
+                            color: ColorsCollection.GreyNeutral,
+                          ),
+                        ),
+                        style: AppTextStyles.hintTextSearch,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: 50,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        children: [
+                          Wrap(
+                            spacing: 12,
+                            children: listChoices
+                                .map(
+                                  (e) => ChoiceChip(
+                                    labelStyle: TextStyle(
+                                      color: idSelected == e.id
+                                          ? ColorsCollection.WhiteNeutral
+                                          : ColorsCollection.GreyNeutral,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadiusDirectional.circular(40),
+                                    ),
+                                    padding: const EdgeInsets.only(
+                                        left: 16, right: 16),
+                                    labelPadding:
+                                        const EdgeInsets.only(left: 4),
+                                    avatar: Icon(
+                                      idSelected == e.id
+                                          ? e.avataricon
+                                          : e.avataricon,
+                                      color: idSelected == e.id
+                                          ? ColorsCollection.WhiteNeutral
+                                          : ColorsCollection.GreyNeutral,
+                                    ),
+                                    selectedColor:
+                                        ColorsCollection.PrimaryColor,
+                                    backgroundColor:
+                                        ColorsCollection.GreyNeutral02,
+                                    label: Text(e.label),
+                                    selected: idSelected == e.id,
+                                    onSelected: (_) => setState(() {
+                                      if (idSelected == e.id) {
+                                        idSelected =
+                                            0; // Nonaktifkan kategori jika sudah dipilih
+                                      } else {
+                                        idSelected = e.id;
+                                      }
+                                    }),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : null,
+        body: screen[_selectedIndex],
+        drawer: Drawer(
+          child: Column(
             children: [
-              const SizedBox(height: 20),
               Padding(
-                padding: CustomPadding.kSidePadding,
-                child: Row(
+                padding: const EdgeInsets.only(top: 40, right: 20, left: 20),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      child: Row(children: [
-                        Builder(
-                          builder: (BuildContext context) {
-                            return GestureDetector(
-                              onTap: () {
-                                Scaffold.of(context).openDrawer();
-                              },
-                              child: const CircleAvatar(
-                                radius: 20,
-                                backgroundColor:
-                                    ColorsCollection.unSelectedColor,
-                                backgroundImage:
-                                    AssetImage('images/aksaracoffe.png'),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(width: 12),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Good Morning',
-                                  style: AppTextStyles.subtitleStyleBlack),
-                              Text('Hello, Aksara Coffee',
-                                  style: AppTextStyles.titleStyleBlack),
-                            ])
-                      ]),
-                    ),
-                    IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(
-                          minWidth: 24,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CartItem()),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.shopping_cart_outlined,
-                          color: ColorsCollection.BlackNeutral,
-                        ))
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              Padding(
-                padding: CustomPadding.kSidePadding,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    hintStyle: AppTextStyles.hintTextSearch,
-                    isDense: true,
-                    border: InputBorder.none,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: ColorsCollection.GreyNeutral),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: ColorsCollection.GreyNeutral),
-                    ),
-                    suffixIcon: const Icon(
-                      Icons.search,
-                      size: 24,
-                      color: ColorsCollection.GreyNeutral,
-                    ),
-                  ),
-                  style: AppTextStyles.hintTextSearch,
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 50,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  children: [
-                    Wrap(
-                      spacing: 12,
-                      children: listChoices
-                          .map(
-                            (e) => ChoiceChip(
-                              labelStyle: TextStyle(
-                                color: idSelected == e.id
-                                    ? ColorsCollection.WhiteNeutral
-                                    : ColorsCollection.GreyNeutral,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadiusDirectional.circular(40),
-                              ),
-                              padding:
-                                  const EdgeInsets.only(left: 16, right: 16),
-                              labelPadding: const EdgeInsets.only(left: 4),
-                              avatar: Icon(
-                                idSelected == e.id
-                                    ? e.avataricon
-                                    : e.avataricon,
-                                color: idSelected == e.id
-                                    ? ColorsCollection.WhiteNeutral
-                                    : ColorsCollection.GreyNeutral,
-                              ),
-                              selectedColor: ColorsCollection.PrimaryColor,
-                              backgroundColor: ColorsCollection.GreyNeutral02,
-                              label: Text(e.label),
-                              selected: idSelected == e.id,
-                              onSelected: (_) => setState(() {
-                                if (idSelected == e.id) {
-                                  idSelected =
-                                      0; // Nonaktifkan kategori jika sudah dipilih
-                                } else {
-                                  idSelected = e.id;
-                                }
-                              }),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              Padding(
-                padding: CustomPadding.kSidePadding,
-                child: Column(children: [
-                  Text(
-                    'Products',
-                    style: AppTextStyles.textProduct,
-                  )
-                ]),
-              ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: CustomPadding.kSidePadding,
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16.0,
-                        mainAxisSpacing: 16.0,
-                        mainAxisExtent: 278,
-                      ),
-                      itemBuilder: (_, index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: ColorsCollection.BlackNeutral
-                                        .withOpacity(0.05),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 1))
-                              ],
-                              color: ColorsCollection.WhiteNeutral,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 130,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      image: const DecorationImage(
-                                          image: AssetImage(
-                                              "images/cappucinoespreso.png"),
-                                          fit: BoxFit.cover),
-                                      borderRadius: BorderRadius.circular(12)),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  "Java Coffee",
-                                  style: AppTextStyles.titleProduct,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  "coffee from espresso, steamed milk, & milk foam",
-                                  style: AppTextStyles.descriptionProduct,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        "Rp.26.000",
-                                        style: AppTextStyles.titleProduct,
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const ViewDetail()),
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: 40,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            color:
-                                                ColorsCollection.PrimaryColor),
-                                        child: const Icon(
-                                          Icons.chevron_right,
-                                          color: ColorsCollection.WhiteNeutral,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            'images/logocoklat.png',
+                            width: 100,
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: ListTile(
+                              dense: true,
+                              minLeadingWidth: 12,
+                              leading: const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: Icon(
+                                    Icons.home,
+                                    color: ColorsCollection.PrimaryColor,
+                                  )),
+                              title: Text('Home',
+                                  style: AppTextStyles.goodMorning),
                             ),
                           ),
-                        );
-                      }),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                _selectedIndex = 1;
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: ListTile(
+                              dense: true,
+                              minLeadingWidth: 12,
+                              leading: const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: Icon(
+                                    Icons.leaderboard,
+                                    color: ColorsCollection.PrimaryColor,
+                                  )),
+                              title: Text('Report',
+                                  style: AppTextStyles.goodMorning),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: ListTile(
+                              dense: true,
+                              minLeadingWidth: 12,
+                              leading: const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: Icon(
+                                    Icons.local_police,
+                                    color: ColorsCollection.PrimaryColor,
+                                  )),
+                              title: Text('Membership',
+                                  style: AppTextStyles.goodMorning),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: ListTile(
+                              dense: true,
+                              minLeadingWidth: 12,
+                              leading: const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: Icon(
+                                    Icons.thumb_up_outlined,
+                                    color: ColorsCollection.PrimaryColor,
+                                  )),
+                              title: Text('Membership',
+                                  style: AppTextStyles.goodMorning),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: ListTile(
+                              dense: true,
+                              minLeadingWidth: 12,
+                              leading: const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: Icon(
+                                    Icons.help_outline,
+                                    color: ColorsCollection.PrimaryColor,
+                                  )),
+                              title: Text('Manual Guide',
+                                  style: AppTextStyles.goodMorning),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: ListTile(
+                              dense: true,
+                              minLeadingWidth: 12,
+                              leading: const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: Icon(
+                                    Icons.account_circle,
+                                    color: ColorsCollection.PrimaryColor,
+                                  )),
+                              title: Text('Call Admin',
+                                  style: AppTextStyles.goodMorning),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: ListTile(
+                              dense: true,
+                              minLeadingWidth: 12,
+                              leading: const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: Icon(
+                                    Icons.report_outlined,
+                                    color: ColorsCollection.PrimaryColor,
+                                  )),
+                              title: Text('Privacy Policy',
+                                  style: AppTextStyles.goodMorning),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: ListTile(
+                              dense: true,
+                              minLeadingWidth: 12,
+                              leading: const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: Icon(
+                                    Icons.star_outline,
+                                    color: ColorsCollection.PrimaryColor,
+                                  )),
+                              title: Text('Give A Rating',
+                                  style: AppTextStyles.goodMorning),
+                            ),
+                          ),
+                          const SizedBox(height: 50),
+                          InkWell(
+                            onTap: () async {
+                              SharedPreferences pref =
+                                  await SharedPreferences.getInstance();
+                              pref.remove("username");
+                              AuthProvider authProvider =
+                                  // ignore: use_build_context_synchronously
+                                  Provider.of<AuthProvider>(context,
+                                      listen: false);
+                              await authProvider.logout();
+                              printUserData();
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (_) {
+                                return const LoginPage();
+                              }));
+                            },
+                            child: ListTile(
+                              dense: true,
+                              minLeadingWidth: 12,
+                              leading: const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: Icon(
+                                    Icons.logout,
+                                    color: ColorsCollection.PrimaryColor,
+                                  )),
+                              title: Text('Logout',
+                                  style: AppTextStyles.goodMorning),
+                            ),
+                          ),
+                        ]),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text(
-                  'Drawer Header',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
+              const Spacer(),
+              Container(
+                color: ColorsCollection.PrimaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 20,
+                        backgroundColor: ColorsCollection.unSelectedColor,
+                        backgroundImage: AssetImage('images/aksaracoffe.png'),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Aksara Coffee',
+                              style: AppTextStyles.titleStyleWhite,
+                            ),
+                            Text(
+                              'Brahmayudha',
+                              style: AppTextStyles.subtitleStyleWhite,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              ListTile(
-                title: const Text('Item 1'),
-                onTap: () {
-                  // Handle item 1 press
-                },
-              ),
-              ListTile(
-                title: const Text('Item 2'),
-                onTap: () {
-                  // Handle item 2 press
-                },
-              ),
-              // ... tambahkan item drawer lainnya sesuai kebutuhan ...
             ],
           ),
         ),
@@ -358,15 +446,11 @@ class _HomePageState extends State<HomePage> {
                 onTap: _onItemTapped,
                 selectedItemColor: ColorsCollection.WhiteNeutral,
                 unselectedItemColor: ColorsCollection.unSelectedColor,
-                items: [
+                items: const [
                   BottomNavigationBarItem(
                       icon: Icon(Icons.local_cafe, size: 24), label: 'Product'),
                   BottomNavigationBarItem(
-                    icon: GestureDetector(
-                        onTap: () {
-                          Scaffold.of(context).openDrawer();
-                        },
-                        child: Icon(Icons.leaderboard_outlined, size: 24)),
+                    icon: Icon(Icons.leaderboard_outlined, size: 24),
                     label: 'Report',
                   ),
                   BottomNavigationBarItem(
@@ -375,6 +459,13 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             )));
+  }
+
+  void printUserData() async {
+    final preferences = await SharedPreferences.getInstance();
+    final token = preferences.getString('token');
+    // Cetak data yang seharusnya tidak ada setelah logout
+    print('Token setelah logout: $token');
   }
 }
 
