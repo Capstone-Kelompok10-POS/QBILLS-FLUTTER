@@ -13,6 +13,10 @@ class AppTextStyles {
       fontSize: 16,
       fontWeight: FontWeight.bold,
       color: ColorsCollection.BlackNeutral);
+  static TextStyle titleStyleWhite = GoogleFonts.openSans(
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+      color: ColorsCollection.WhiteNeutral);
   static TextStyle titleStyleBlack1 = GoogleFonts.openSans(
       fontSize: 24,
       fontWeight: FontWeight.bold,
@@ -21,7 +25,15 @@ class AppTextStyles {
       fontSize: 14,
       fontWeight: FontWeight.normal,
       color: ColorsCollection.BlackNeutral);
+  static TextStyle subtitleStyleWhite = GoogleFonts.openSans(
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      color: ColorsCollection.WhiteNeutral);
   static TextStyle subtitleStyle = GoogleFonts.openSans(
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      color: ColorsCollection.GreyNeutral);
+  static TextStyle subtitleStyleCenter = GoogleFonts.openSans(
       fontSize: 14,
       fontWeight: FontWeight.normal,
       color: ColorsCollection.GreyNeutral);
@@ -45,8 +57,18 @@ class AppTextStyles {
       GoogleFonts.openSans(fontSize: 14, fontWeight: FontWeight.w600);
   static TextStyle textProduct =
       GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.bold);
-  static TextStyle titleProduct =
-      GoogleFonts.openSans(fontSize: 16, fontWeight: FontWeight.bold);
+  static TextStyle titleProduct = GoogleFonts.openSans(
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+      color: ColorsCollection.BlackNeutral);
+  static TextStyle appbartitle = GoogleFonts.openSans(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      color: ColorsCollection.BlackNeutral);
+  static TextStyle appbartitlewhite = GoogleFonts.openSans(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      color: ColorsCollection.WhiteNeutral);
   static TextStyle descriptionProduct = GoogleFonts.openSans(
       fontSize: 12,
       fontWeight: FontWeight.normal,
@@ -58,5 +80,25 @@ class AppTextStyles {
   static TextStyle userWelcome =
       GoogleFonts.openSans(fontSize: 14, fontWeight: FontWeight.w600);
   static TextStyle labelStyleButton =
-      GoogleFonts.openSans(fontSize: 12, color: ColorsCollection.WhiteNeutral);  
+      GoogleFonts.openSans(fontSize: 12, color: ColorsCollection.WhiteNeutral);
+  static TextStyle title2 = GoogleFonts.openSans(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: ColorsCollection.BlackNeutral06);
+  static TextStyle subtitle2 = GoogleFonts.openSans(
+      fontSize: 12,
+      fontWeight: FontWeight.normal,
+      color: ColorsCollection.BlackNeutral06);
+  static TextStyle subtitle3 = GoogleFonts.openSans(
+      fontSize: 12,
+      fontWeight: FontWeight.normal,
+      color: ColorsCollection.GreyNeutral);
+  static TextStyle textStyleButton01 = GoogleFonts.openSans(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: ColorsCollection.PrimaryColor);
+  static TextStyle errorsubtitle = GoogleFonts.openSans(
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      color: ColorsCollection.ErrorColor);
 }
