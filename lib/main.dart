@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:pos_capstone/check.dart';
 import 'package:pos_capstone/view/authentication/loginpage.dart';
-import 'package:pos_capstone/view/authentication/service/services.dart';
 import 'package:pos_capstone/view/homepage.dart';
-import 'package:pos_capstone/view/payment/receipt-success.dart';
+import 'package:pos_capstone/view/welcomepage.dart';
+import 'package:pos_capstone/viewmodel/view_model_login.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,12 +19,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AuthProvider(),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => LoginVM())],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        home: HomePage(),
+        home: Check(),
       ),
     );
   }

@@ -122,10 +122,10 @@ class _PaymentProcessState extends State<PaymentProcess> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Image.asset(
-                                    "images/Bca.png",
-                                    width: 50,
-                                  ),
+                                  // Image.asset(
+                                  //   "images/Bca.png",
+                                  //   width: 50,
+                                  // ),
                                   const SizedBox(height: 4),
                                   Text(
                                     "798 723 7797",

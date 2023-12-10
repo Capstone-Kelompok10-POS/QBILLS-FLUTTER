@@ -3,13 +3,12 @@ import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
 import 'package:pos_capstone/view/authentication/loginpage.dart';
-import 'package:pos_capstone/view/authentication/service/services.dart';
 import 'package:pos_capstone/view/cart/cartitem.dart';
 import 'package:pos_capstone/view/chip/model.dart';
 import 'package:pos_capstone/view/dashboard.dart';
-import 'package:pos_capstone/view/membership/membership_details.dart';
 import 'package:pos_capstone/view/membership/membership_list.dart';
 import 'package:pos_capstone/view/reportpage/report.dart';
+import 'package:pos_capstone/viewmodel/view_model_login.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,7 +21,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   final screen = [
     const DashboardPage(),
@@ -59,6 +57,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final loginViewmodel = Provider.of<LoginVM>(context, listen: false);
     return Scaffold(
         key: _drawerKey,
         backgroundColor: ColorsCollection.WhiteNeutral,
@@ -229,7 +228,12 @@ class _HomePageState extends State<HomePage> {
                             width: 100,
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              setState(() {
+                                _selectedIndex = 0;
+                                Navigator.pop(context);
+                              });
+                            },
                             child: ListTile(
                               dense: true,
                               minLeadingWidth: 12,
@@ -266,7 +270,12 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              setState(() {
+                                _selectedIndex = 2;
+                                Navigator.pop(context);
+                              });
+                            },
                             child: ListTile(
                               dense: true,
                               minLeadingWidth: 12,
@@ -293,7 +302,7 @@ class _HomePageState extends State<HomePage> {
                                     Icons.thumb_up_outlined,
                                     color: ColorsCollection.PrimaryColor,
                                   )),
-                              title: Text('Membership',
+                              title: Text('Suggestion Product',
                                   style: AppTextStyles.goodMorning),
                             ),
                           ),
@@ -363,21 +372,13 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const SizedBox(height: 50),
                           InkWell(
-                            onTap: () async {
-                              SharedPreferences pref =
-                                  await SharedPreferences.getInstance();
-                              pref.remove("username");
-                              AuthProvider authProvider =
-                                  // ignore: use_build_context_synchronously
-                                  Provider.of<AuthProvider>(context,
-                                      listen: false);
-                              await authProvider.logout();
-                              printUserData();
-                              // ignore: use_build_context_synchronously
-                              Navigator.pushReplacement(context,
-                                  MaterialPageRoute(builder: (_) {
-                                return const LoginPage();
-                              }));
+                            onTap: () {
+                              loginViewmodel.logindata
+                                  .setBool('loginCurrent', true);
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => const LoginPage()),
+                                  (route) => false);
                             },
                             child: ListTile(
                               dense: true,
@@ -420,7 +421,7 @@ class _HomePageState extends State<HomePage> {
                               style: AppTextStyles.titleStyleWhite,
                             ),
                             Text(
-                              'Brahmayudha',
+                              'Aksara Coffee',
                               style: AppTextStyles.subtitleStyleWhite,
                             )
                           ],
