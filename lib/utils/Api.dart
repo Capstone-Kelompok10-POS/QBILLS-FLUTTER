@@ -2,5 +2,6 @@
 
 class Url {
   static const String BaseUrl = "https://qbills.biz.id";
-  static const String LoginUrl = "/api/v1/admin/login";
+  static const String LoginUrl = "/api/v1/cashier/login";
+  static const String ProductUrl = "/api/v1/product/category/";
 }

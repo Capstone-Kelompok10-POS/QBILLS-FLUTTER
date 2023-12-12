@@ -18,6 +18,7 @@ class _DetailCashPaymentState extends State<DetailCashPayment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: ColorsCollection.WhiteNeutral,
       body: Stack(
         clipBehavior: Clip.none,
@@ -52,7 +53,9 @@ class _DetailCashPaymentState extends State<DetailCashPayment> {
                       padding: EdgeInsetsDirectional.zero,
                       constraints:
                           const BoxConstraints(minHeight: 10, minWidth: 10),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       icon: const Icon(Icons.arrow_back_ios_new_rounded),
                       color: ColorsCollection.WhiteNeutral,
                       iconSize: 20,

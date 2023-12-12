@@ -7,11 +7,11 @@ import 'package:pos_capstone/constant/textstyle/textstyle.dart';
 
 import 'package:pos_capstone/view/cart/cartitem.dart';
 
-class ProductDetail extends StatefulWidget {
-  const ProductDetail({super.key});
+class ProductDetailScreen extends StatefulWidget {
+  const ProductDetailScreen({super.key});
 
   @override
-  State<ProductDetail> createState() => _ProductDetailState();
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
 class CoffeeSize {
@@ -23,7 +23,7 @@ class CoffeeSize {
   CoffeeSize(this.id, this.imgPath, this.sizing, this.capacity);
 }
 
-class _ProductDetailState extends State<ProductDetail> {
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final listSize = <CoffeeSize>[
     CoffeeSize(1, 'images/cup.png', 'Normal', '220ml'),
     CoffeeSize(2, 'images/cup.png', 'Small', '120ml'),

@@ -1,5 +1,6 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pos_capstone/constant/button/button_collection.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
@@ -32,12 +33,26 @@ class _PaymentProcessState extends State<PaymentProcess> {
                     color: ColorsCollection.Brown),
               ),
               const Spacer(),
-              Text(
-                'Once your payment is confirmed, we will immediately\nsend you a receipt.',
-                style: AppTextStyles.subtitle3,
-                textAlign: TextAlign.center,
+              Padding(
+                padding: CustomPadding.kSidePadding,
+                child: CustomButton(
+                  iconData: Icons.shopping_cart,
+                  text: "Already Paid",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
+                  buttonType: ButtonType.filled,
+                ),
               ),
-              const SizedBox(height: 12)
+              const SizedBox(height: 8),
+              InkWell(
+                child:
+                    Text('Cancel payment', style: AppTextStyles.errorsubtitle),
+              ),
+              const SizedBox(height: 24),
             ],
           ),
           Padding(
@@ -51,7 +66,9 @@ class _PaymentProcessState extends State<PaymentProcess> {
                       padding: EdgeInsetsDirectional.zero,
                       constraints:
                           const BoxConstraints(minHeight: 10, minWidth: 10),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       icon: const Icon(Icons.arrow_back_ios_new_rounded),
                       color: ColorsCollection.WhiteNeutral,
                       iconSize: 20,
@@ -61,173 +78,196 @@ class _PaymentProcessState extends State<PaymentProcess> {
                     Text('Payment', style: AppTextStyles.appbartitlewhite),
                   ],
                 ),
-                const SizedBox(height: 20),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.82,
-                  width: MediaQuery.of(context).size.width * 1,
-                  decoration: BoxDecoration(
-                    color: ColorsCollection.WhiteNeutral,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 23),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 20),
-                        Image.asset("images/payprocess.png"),
-                        const SizedBox(height: 10),
-                        Text('Transfer Process',
-                            style: AppTextStyles.titleStyleBlack1),
-                        const SizedBox(height: 8),
-                        Text(
-                            'Complete the payment according to the terms as soon as possible.',
-                            textAlign: TextAlign.center,
-                            style: AppTextStyles.subtitleStyle),
-                        const SizedBox(height: 30),
-                        const DottedLine(
-                          lineLength: double.infinity,
-                          direction: Axis.horizontal,
-                          lineThickness: .2,
-                          dashLength: 15.0,
-                          dashColor: ColorsCollection.GreyNeutral,
-                        ),
-                        const SizedBox(height: 30),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              height: 50,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Please transfer to",
-                                    style: AppTextStyles.subtitle3,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    "PT.Qbills.biz",
-                                    style: AppTextStyles.subtitleStyleBlack,
-                                  ),
-                                ],
-                              ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 100),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.74,
+              width: MediaQuery.of(context).size.width * 1,
+              decoration: BoxDecoration(
+                color: ColorsCollection.WhiteNeutral,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 23),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      Image.asset("images/payprocess.png"),
+                      const SizedBox(height: 10),
+                      Text('Transfer Process',
+                          style: AppTextStyles.titleStyleBlack1),
+                      const SizedBox(height: 8),
+                      Text(
+                          'Complete the payment according to the terms as soon as possible.',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.subtitleStyle),
+                      const SizedBox(height: 30),
+                      const DottedLine(
+                        lineLength: double.infinity,
+                        direction: Axis.horizontal,
+                        lineThickness: .2,
+                        dashLength: 15.0,
+                        dashColor: ColorsCollection.GreyNeutral,
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            height: 50,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Please transfer to",
+                                  style: AppTextStyles.subtitle3,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  "PT.Qbills.biz",
+                                  style: AppTextStyles.subtitleStyleBlack,
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              height: 50,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  // Image.asset(
-                                  //   "images/Bca.png",
-                                  //   width: 50,
-                                  // ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    "798 723 7797",
-                                    style: AppTextStyles.titleProduct,
-                                  ),
-                                ],
-                              ),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                SvgPicture.asset(
+                                  "images/bankbca.svg",
+                                  width: 20,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  "798 723 7797",
+                                  style: AppTextStyles.titleProduct,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 30),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Total Payment',
-                                style: AppTextStyles.subtitleStyle),
-                            Text('Rp.28.600',
-                                style: AppTextStyles.titleStyleBlack),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        const Divider(
-                          color: ColorsCollection.GreyNeutral02,
-                          thickness: 1,
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Item', style: AppTextStyles.title2),
-                            Text('Amount', style: AppTextStyles.title2),
-                          ],
-                        ),
-                        const Divider(
-                          color: ColorsCollection.GreyNeutral02,
-                          thickness: 1,
-                        ),
-                        const SizedBox(height: 10),
-                        const Align(
-                            alignment: Alignment.topLeft,
-                            child: Text("Cuppucino Espresso")),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('1 x 26.000',
-                                style: AppTextStyles.subtitleStyle),
-                            Text('26.000', style: AppTextStyles.subtitleStyle),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Payment Method',
-                                style: AppTextStyles.subtitleStyle),
-                            Text('Transfer',
-                                style: AppTextStyles.subtitleStyle),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Discount',
-                                style: AppTextStyles.subtitleStyle),
-                            Text('Rp.0', style: AppTextStyles.subtitleStyle),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Tax', style: AppTextStyles.subtitleStyle),
-                            Text('Rp.1.599',
-                                style: AppTextStyles.subtitleStyle),
-                          ],
-                        ),
-                        const Spacer(),
-                        CustomButton(
-                          iconData: Icons.shopping_cart,
-                          text: "Already Paid",
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()),
-                            );
-                          },
-                          buttonType: ButtonType.filled,
-                        ),
-                        const SizedBox(height: 16),
-                        InkWell(
-                          child: Text('Cancel payment',
-                              style: AppTextStyles.errorsubtitle),
-                        ),
-                        const SizedBox(height: 10)
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Total Payment',
+                              style: AppTextStyles.subtitleStyle),
+                          Text('Rp.28.600',
+                              style: AppTextStyles.titleStyleBlack),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      const Divider(
+                        color: ColorsCollection.GreyNeutral02,
+                        thickness: 1,
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Item', style: AppTextStyles.title2),
+                          Text('Amount', style: AppTextStyles.title2),
+                        ],
+                      ),
+                      const Divider(
+                        color: ColorsCollection.GreyNeutral02,
+                        thickness: 1,
+                      ),
+                      const SizedBox(height: 10),
+                      const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Cuppucino Espresso")),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('1 x 26.000',
+                              style: AppTextStyles.subtitleStyle),
+                          Text('26.000', style: AppTextStyles.subtitleStyle),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Payment Method',
+                              style: AppTextStyles.subtitleStyle),
+                          Text('Transfer', style: AppTextStyles.subtitleStyle),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Discount', style: AppTextStyles.subtitleStyle),
+                          Text('Rp.0', style: AppTextStyles.subtitleStyle),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Tax', style: AppTextStyles.subtitleStyle),
+                          Text('Rp.1.599', style: AppTextStyles.subtitleStyle),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Tax', style: AppTextStyles.subtitleStyle),
+                          Text('Rp.1.599', style: AppTextStyles.subtitleStyle),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Tax', style: AppTextStyles.subtitleStyle),
+                          Text('Rp.1.599', style: AppTextStyles.subtitleStyle),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Tax', style: AppTextStyles.subtitleStyle),
+                          Text('Rp.1.599', style: AppTextStyles.subtitleStyle),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Tax', style: AppTextStyles.subtitleStyle),
+                          Text('Rp.1.599', style: AppTextStyles.subtitleStyle),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Tax', style: AppTextStyles.subtitleStyle),
+                          Text('Rp.1.599', style: AppTextStyles.subtitleStyle),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Tax', style: AppTextStyles.subtitleStyle),
+                          Text('Rp.1.599', style: AppTextStyles.subtitleStyle),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ],

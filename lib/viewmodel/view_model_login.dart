@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:pos_capstone/models/login_model.dart';
@@ -14,7 +14,6 @@ class LoginVM with ChangeNotifier {
   final TextEditingController password = TextEditingController();
   LoginModel? dataLogin;
   bool rememberMe = false;
-  bool heightContainer = false;
   final service = loginService();
   late SharedPreferences logindata;
   late bool newUser;
@@ -27,14 +26,18 @@ class LoginVM with ChangeNotifier {
     checkSharedPreferences();
   }
 
-  Future<void> Login() async {
-    final usernameUser = username.text;
-    final passwordUser = password.text;
-    final data = await service.loginAccount(usernameUser, passwordUser);
-    dataLogin = data;
-    usernameSharedPreference = dataLogin!.results.username;
-    accessTokenSharedPreference = dataLogin!.results.token;
-  }
+  // Future<void> Login() async {
+  //   final usernameUser = username.text;
+  //   final passwordUser = password.text;
+  //   final data = await service.loginAccount(usernameUser, passwordUser);
+  //   dataLogin = data;
+  //   usernameSharedPreference = dataLogin!.results.username;
+  //   accessTokenSharedPreference = dataLogin!.results.token;
+  //   print("ini adalah fungsi login");
+  //   print(usernameSharedPreference);
+  //   print(accessTokenSharedPreference);
+  //   notifyListeners();
+  // }
 
   Future<void> saveDataSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
@@ -51,12 +54,23 @@ class LoginVM with ChangeNotifier {
     final storedAccessToken = prefs.getString("access_token");
     usernameSharedPreference = storedUsername!;
     accessTokenSharedPreference = storedAccessToken!;
-    notifyListeners();
+    print(usernameSharedPreference);
+    print(accessTokenSharedPreference);
+    // notifyListeners();
   }
 
   Future<void> buttonLogin(context) async {
+    print("ini adalah button login");
     if (formkeylogin.currentState!.validate()) {
       final data = await service.loginAccount(username.text, password.text);
+      dataLogin = data;
+      usernameSharedPreference = dataLogin!.results.username;
+      accessTokenSharedPreference = dataLogin!.results.token;
+      print("ini adalah fungsi login");
+      print(usernameSharedPreference);
+      print(accessTokenSharedPreference);
+      logindata.setString("username", usernameSharedPreference);
+      logindata.setString("access_token", accessTokenSharedPreference);
       logindata.setBool('loginCurrent', false);
       if (data != null) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -67,6 +81,7 @@ class LoginVM with ChangeNotifier {
   }
 
   void newLogin(BuildContext context) async {
+    print("ini adalah newlogin");
     logindata = await SharedPreferences.getInstance();
     newUser = logindata.getBool("login") ?? true;
     if (newUser == false) {

@@ -5,6 +5,7 @@ import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
 import 'package:pos_capstone/view/payment/payment_detail.dart';
+import 'package:pos_capstone/view/payment/payment_process.dart';
 import 'package:pos_capstone/view/payment/payment_qris.dart';
 
 class CartItems extends StatefulWidget {
@@ -499,6 +500,12 @@ class _CartItemsState extends State<CartItems> {
                                                               _selectedRadio =
                                                                   value!;
                                                             });
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            const PaymentProcess()));
                                                           },
                                                           controlAffinity:
                                                               ListTileControlAffinity

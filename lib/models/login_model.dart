@@ -41,27 +41,23 @@ class Meta {
 class Results {
   final String fullname;
   final String username;
-  final String role;
   final String token;
 
   Results({
     required this.fullname,
     required this.username,
-    required this.role,
     required this.token,
   });
 
   factory Results.fromJson(Map<String, dynamic> json) => Results(
         fullname: json["fullname"],
         username: json["username"],
-        role: json["role"],
         token: json["token"],
       );
 
   Map<String, dynamic> toJson() => {
         "fullname": fullname,
         "username": username,
-        "role": role,
         "token": token,
       };
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
@@ -9,6 +11,7 @@ import 'package:pos_capstone/view/dashboard.dart';
 import 'package:pos_capstone/view/membership/membership_list.dart';
 import 'package:pos_capstone/view/reportpage/report.dart';
 import 'package:pos_capstone/viewmodel/view_model_login.dart';
+import 'package:pos_capstone/viewmodel/view_model_product.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  late LoginVM loginViewmodel;
 
   final screen = [
     const DashboardPage(),
@@ -34,6 +38,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  late ProductProvider productProvider;
+
   final listChoices = <ItemChoice>[
     ItemChoice(1, 'Coffee', Icons.local_cafe_outlined),
     ItemChoice(2, 'Non Coffee', Icons.local_drink),
@@ -41,9 +47,13 @@ class _HomePageState extends State<HomePage> {
     ItemChoice(4, 'Snack', Icons.fastfood),
   ];
   var idSelected = 1;
+
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
+    productProvider = Provider.of<ProductProvider>(context, listen: false);
+    loginViewmodel = Provider.of<LoginVM>(context, listen: false);
+    productProvider.getProducts();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
@@ -57,7 +67,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final loginViewmodel = Provider.of<LoginVM>(context, listen: false);
     return Scaffold(
         key: _drawerKey,
         backgroundColor: ColorsCollection.WhiteNeutral,
@@ -156,55 +165,50 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 16),
                     SizedBox(
                       height: 50,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        children: [
-                          Wrap(
-                            spacing: 12,
-                            children: listChoices
-                                .map(
-                                  (e) => ChoiceChip(
-                                    labelStyle: TextStyle(
-                                      color: idSelected == e.id
-                                          ? ColorsCollection.WhiteNeutral
-                                          : ColorsCollection.GreyNeutral,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadiusDirectional.circular(40),
-                                    ),
-                                    padding: const EdgeInsets.only(
-                                        left: 16, right: 16),
-                                    labelPadding:
-                                        const EdgeInsets.only(left: 4),
-                                    avatar: Icon(
-                                      idSelected == e.id
-                                          ? e.avataricon
-                                          : e.avataricon,
-                                      color: idSelected == e.id
-                                          ? ColorsCollection.WhiteNeutral
-                                          : ColorsCollection.GreyNeutral,
-                                    ),
-                                    selectedColor:
-                                        ColorsCollection.PrimaryColor,
-                                    backgroundColor:
-                                        ColorsCollection.GreyNeutral02,
-                                    label: Text(e.label),
-                                    selected: idSelected == e.id,
-                                    onSelected: (_) => setState(() {
-                                      if (idSelected == e.id) {
-                                        idSelected =
-                                            0; // Nonaktifkan kategori jika sudah dipilih
-                                      } else {
-                                        idSelected = e.id;
-                                      }
-                                    }),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ],
+                      child: Consumer<ProductProvider>(
+                        builder: (context, value, child) => ListView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          children: [
+                            Wrap(
+                              spacing: 12,
+                              children: listChoices
+                                  .map(
+                                    (e) => ChoiceChip(
+                                        labelStyle: TextStyle(
+                                          color: value.pageIndex == e.id
+                                              ? ColorsCollection.WhiteNeutral
+                                              : ColorsCollection.GreyNeutral,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadiusDirectional.circular(
+                                                  40),
+                                        ),
+                                        padding: const EdgeInsets.only(
+                                            left: 16, right: 16),
+                                        labelPadding:
+                                            const EdgeInsets.only(left: 4),
+                                        avatar: Icon(
+                                          value.pageIndex == e.id
+                                              ? e.avataricon
+                                              : e.avataricon,
+                                          color: value.pageIndex == e.id
+                                              ? ColorsCollection.WhiteNeutral
+                                              : ColorsCollection.GreyNeutral,
+                                        ),
+                                        selectedColor:
+                                            ColorsCollection.PrimaryColor,
+                                        backgroundColor:
+                                            ColorsCollection.GreyNeutral02,
+                                        label: Text(e.label),
+                                        selected: value.pageIndex == e.id,
+                                        onSelected: (_) => value.setPage(e.id)),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -420,9 +424,17 @@ class _HomePageState extends State<HomePage> {
                               'Aksara Coffee',
                               style: AppTextStyles.titleStyleWhite,
                             ),
-                            Text(
-                              'Aksara Coffee',
-                              style: AppTextStyles.subtitleStyleWhite,
+                            Consumer<LoginVM>(
+                              builder: (context, LoginVM, _) {
+                                LoginVM.checkSharedPreferences();
+                                final username =
+                                    LoginVM.usernameSharedPreference;
+                                print(username);
+                                return Text(
+                                  username.isNotEmpty ? username : 'Guest',
+                                  style: AppTextStyles.subtitleStyleWhite,
+                                );
+                              },
                             )
                           ],
                         ),

@@ -51,7 +51,9 @@ class _PaymentQrisState extends State<PaymentQris> {
                       padding: EdgeInsetsDirectional.zero,
                       constraints:
                           const BoxConstraints(minHeight: 10, minWidth: 10),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       icon: const Icon(Icons.arrow_back_ios_new_rounded),
                       color: ColorsCollection.WhiteNeutral,
                       iconSize: 20,
