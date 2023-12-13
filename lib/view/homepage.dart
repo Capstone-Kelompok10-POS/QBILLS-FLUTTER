@@ -316,7 +316,13 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ChatbotPage(),
+                                    ));
+                              },
                               child: ListTile(
                                 dense: true,
                                 minLeadingWidth: 12,
