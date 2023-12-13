@@ -7,6 +7,8 @@ import 'package:pos_capstone/constant/textstyle/textstyle.dart';
 import 'package:pos_capstone/models/product_model.dart';
 
 import 'package:pos_capstone/view/cart/cartitem.dart';
+import 'package:pos_capstone/viewmodel/view_model_product.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.data});
@@ -25,14 +27,13 @@ class CoffeeSize {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  final listSize = <CoffeeSize>[
-    CoffeeSize(1, 'images/cup.png', 'Normal', '220ml'),
-    CoffeeSize(2, 'images/cup.png', 'Small', '120ml'),
-    CoffeeSize(3, 'images/cup.png', 'Big', '320ml'),
-  ];
+  final listSize = <CoffeeSize>[];
+
   var idSelected = 1;
   int quantity = 1;
   double totalPrice = 0;
+  bool isChoice = false;
+  String sizeSelected = "";
 
   void updateTotalPrice() {
     setState(() {
@@ -41,16 +42,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   late final Result data;
-  late final ProductDetail datadetail;
+  // late final ProductDetail datadetail;
+  late final List<ProductDetail> datadetail;
   @override
   void initState() {
     super.initState();
     data = widget.data;
+    datadetail = widget.data.productDetail;
+    for (int i = 0; i < datadetail.length; i++) {
+      listSize.add(CoffeeSize(i, "images/cup.png", datadetail[i].size, "-"));
+    }
+    setState(() {});
     totalPrice = data.productDetail[0].price * quantity.toDouble();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(datadetail);
     return Scaffold(
         backgroundColor: ColorsCollection.WhiteNeutral,
         appBar: AppBar(
@@ -150,10 +158,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     avatar: Image.asset(
                                         height: 30,
                                         width: 30,
-                                        idSelected == e.id
-                                            ? e.imgPath
-                                            : e.imgPath,
-                                        color: idSelected == e.id
+                                        isChoice ? e.imgPath : e.imgPath,
+                                        color: isChoice
                                             ? ColorsCollection.WhiteNeutral
                                             : ColorsCollection.BlackNeutral),
                                     selectedColor:
@@ -172,7 +178,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           style: GoogleFonts.openSans(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
-                                            color: idSelected == e.id
+                                            color: isChoice
                                                 ? ColorsCollection.WhiteNeutral
                                                 : ColorsCollection.BlackNeutral,
                                           ),
@@ -182,15 +188,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           style: GoogleFonts.openSans(
                                             fontWeight: FontWeight.normal,
                                             fontSize: 12,
-                                            color: idSelected == e.id
+                                            color: isChoice
                                                 ? ColorsCollection.WhiteNeutral
                                                 : ColorsCollection.GreyNeutral,
                                           ),
                                         )
                                       ],
                                     ),
-                                    selected: idSelected == e.id,
-                                    onSelected: (_) => setState(() {
+                                    // selected: idSelected == e.id,
+                                    selected: isChoice,
+                                    onSelected: (value) => setState(() {
+                                      print(isChoice);
+                                      isChoice = value;
+                                      sizeSelected = e.sizing;
                                       if (idSelected == e.id) {
                                         idSelected = 0;
                                       } else {
@@ -210,112 +220,134 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: Container(
-            height: 132,
-            decoration: const BoxDecoration(
-              color: ColorsCollection.WhiteNeutral,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: ColorsCollection.BlackNeutral,
-                  blurRadius: 12,
-                  spreadRadius: 1,
-                  offset: Offset(1, 12), // Shadow position
+        bottomNavigationBar: Consumer<ProductProvider>(
+          builder: (context, value, child) {
+            return Container(
+                height: 132,
+                decoration: const BoxDecoration(
+                  color: ColorsCollection.WhiteNeutral,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: ColorsCollection.BlackNeutral,
+                      blurRadius: 12,
+                      spreadRadius: 1,
+                      offset: Offset(1, 12), // Shadow position
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
                     children: [
-                      SizedBox(
-                        child: Row(
-                          children: [
-                            Text(
-                              "Total : ",
-                              style: AppTextStyles.subtitleStyleBlack,
-                            ),
-                            Text(
-                              "Rp.${totalPrice.toStringAsFixed(0)}",
-                              style: AppTextStyles.titleStyleBlack,
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 80,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (quantity > 1) {
-                                    quantity--; // Decrease quantity
-                                    updateTotalPrice();
-                                  }
-                                });
-                              },
-                              child: Container(
-                                height: 24,
-                                width: 24,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 1,
-                                        color: ColorsCollection.GreyNeutral02),
-                                    borderRadius: BorderRadius.circular(6)),
-                                child: const Icon(Icons.remove, size: 14),
-                              ),
-                            ),
-                            Text(quantity.toString()),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  setState(() {
-                                    quantity++; // Increase quantity
-                                    updateTotalPrice(); // Update total price
-                                  });
-                                });
-                              },
-                              child: Container(
-                                height: 24,
-                                width: 24,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 1,
-                                        color: ColorsCollection.GreyNeutral02),
-                                    borderRadius: BorderRadius.circular(6)),
-                                child: const Icon(
-                                  Icons.add,
-                                  size: 14,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Total : ",
+                                  style: AppTextStyles.subtitleStyleBlack,
                                 ),
-                              ),
+                                Text(
+                                  "Rp.${totalPrice.toStringAsFixed(0)}",
+                                  style: AppTextStyles.titleStyleBlack,
+                                )
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(
+                            width: 80,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (quantity > 1) {
+                                        quantity--; // Decrease quantity
+                                        updateTotalPrice();
+                                      }
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 24,
+                                    width: 24,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1,
+                                            color:
+                                                ColorsCollection.GreyNeutral02),
+                                        borderRadius: BorderRadius.circular(6)),
+                                    child: const Icon(Icons.remove, size: 14),
+                                  ),
+                                ),
+                                Text(quantity.toString()),
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      setState(() {
+                                        quantity++; // Increase quantity
+                                        updateTotalPrice(); // Update total price
+                                      });
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 24,
+                                    width: 24,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1,
+                                            color:
+                                                ColorsCollection.GreyNeutral02),
+                                        borderRadius: BorderRadius.circular(6)),
+                                    child: const Icon(
+                                      Icons.add,
+                                      size: 14,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
+                      const SizedBox(height: 16),
+                      CustomButton(
+                        iconData: Icons.shopping_cart,
+                        text: "Add to Cart",
+                        onPressed: () {
+                          print(idSelected);
+                          print(isChoice);
+                          if (!isChoice) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Size Belum Dipilih")));
+                            return;
+                          }
+                          value.addToCartItem(
+                              data.id.toString(),
+                              data.image,
+                              sizeSelected,
+                              data.name,
+                              data.productDetail[0].price.toString(),
+                              quantity);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CartItems()),
+                          );
+                        },
+                        buttonType: ButtonType.withIcon,
+                      )
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  CustomButton(
-                    iconData: Icons.shopping_cart,
-                    text: "Add to Cart",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CartItems()),
-                      );
-                    },
-                    buttonType: ButtonType.withIcon,
-                  )
-                ],
-              ),
-            )));
+                ));
+          },
+        ));
   }
 }
