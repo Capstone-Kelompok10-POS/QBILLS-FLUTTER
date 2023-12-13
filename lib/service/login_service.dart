@@ -17,7 +17,7 @@ class loginService {
       final Map<String, dynamic> jsonData = response.data;
       final LoginModel loginModel = LoginModel.fromJson(jsonData);
       return loginModel;
-    } on DioException catch (e) {
+    } catch (e) {
       print(e);
     }
     return null;

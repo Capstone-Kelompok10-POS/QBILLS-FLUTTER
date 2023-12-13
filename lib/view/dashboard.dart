@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
+import 'package:pos_capstone/models/login_model.dart';
 import 'package:pos_capstone/models/product_model.dart';
 import 'package:pos_capstone/service/product_service.dart';
 import 'package:pos_capstone/view/detailproduct/productdetail.dart';
@@ -49,7 +50,6 @@ class _DashboardPageState extends State<DashboardPage> {
             Padding(
               padding: CustomPadding.kSidePadding,
               child: SizedBox(
-                height: MediaQuery.of(context).size.height,
                 child: GridView.builder(
                     itemCount: provider.productModel!.results.length,
                     physics: const NeverScrollableScrollPhysics(),
@@ -115,8 +115,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      productDetail.productDetail[0].price
-                                          .toString(),
+                                      'Rp.${productDetail.productDetail[0].price.toString()}',
                                       style: AppTextStyles.titleProduct,
                                     ),
                                   ),
@@ -126,7 +125,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const ProductDetailScreen()),
+                                                ProductDetailScreen(
+                                                    data: productDetail)),
                                       );
                                     },
                                     child: Container(
@@ -151,6 +151,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     }),
               ),
             ),
+            const SizedBox(height: 20),
           ],
         );
       }
