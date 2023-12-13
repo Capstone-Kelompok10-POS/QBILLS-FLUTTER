@@ -57,7 +57,7 @@ class Result {
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
-        id: json["Id"],
+        id: json["id"],
         productType: ProductType.fromJson(json["productType"]),
         name: json["name"],
         ingredients: json["ingredients"],

@@ -32,12 +32,6 @@ class _HomePageState extends State<HomePage> {
     const MembershipListPage(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   late ProductProvider productProvider;
 
   final listChoices = <ItemChoice>[
@@ -49,11 +43,24 @@ class _HomePageState extends State<HomePage> {
   var idSelected = 1;
 
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
+  // @override
+  // void initState() {
+  //   productProvider = Provider.of<ProductProvider>(context, listen: false);
+  //   loginViewmodel = Provider.of<LoginVM>(context, listen: false);
+  //   productProvider.getProducts();
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return const GuideDialog();
+  //       },
+  //     );
+  //   });
+  // }
+
   @override
   void initState() {
-    productProvider = Provider.of<ProductProvider>(context, listen: false);
-    loginViewmodel = Provider.of<LoginVM>(context, listen: false);
-    productProvider.getProducts();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
@@ -67,428 +74,429 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _drawerKey,
-        backgroundColor: ColorsCollection.WhiteNeutral,
-        appBar: _selectedIndex == 0
-            ? AppBar(
-                toolbarHeight: 210,
-                titleSpacing: 0,
-                automaticallyImplyLeading: false,
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                title: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: CustomPadding.kSidePadding,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            child: Row(children: [
-                              Builder(
-                                builder: (BuildContext context) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Scaffold.of(context).openDrawer();
-                                    },
-                                    child: const CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor:
-                                          ColorsCollection.unSelectedColor,
-                                      backgroundImage:
-                                          AssetImage('images/aksaracoffe.png'),
-                                    ),
-                                  );
-                                },
-                              ),
-                              const SizedBox(width: 12),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Good Morning',
-                                        style:
-                                            AppTextStyles.subtitleStyleBlack),
-                                    Text('Hello, Aksara Coffee',
-                                        style: AppTextStyles.titleStyleBlack),
-                                  ])
-                            ]),
-                          ),
-                          Badge(
-                            alignment: Alignment.topRight,
-                            label: const Text("2"),
-                            smallSize: 10,
-                            child: IconButton(
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(
-                                  minWidth: 24,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const CartItems()),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.shopping_cart_outlined,
-                                  color: ColorsCollection.BlackNeutral,
-                                )),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: CustomPadding.kSidePadding,
-                      child: TextField(
-                        onChanged: (query) {
-                          if (query.isNotEmpty) {
-                            // Panggil metode pencarian di ViewModel
-                            Provider.of<ProductProvider>(context, listen: false)
-                                .searchProduct(query,
-                                    productProvider.productModel!.results);
-                          } else {
-                            Provider.of<ProductProvider>(context, listen: false)
-                                .clearSearch();
-                          }
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Search',
-                          hintStyle: AppTextStyles.hintTextSearch,
-                          isDense: true,
-                          border: InputBorder.none,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(
-                                color: ColorsCollection.GreyNeutral),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(
-                                color: ColorsCollection.GreyNeutral),
-                          ),
-                          suffixIcon: const Icon(
-                            Icons.search,
-                            size: 24,
-                            color: ColorsCollection.GreyNeutral,
-                          ),
-                        ),
-                        style: AppTextStyles.hintTextSearch,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      height: 50,
-                      child: Consumer<ProductProvider>(
-                        builder: (context, value, child) => ListView(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          children: [
-                            Wrap(
-                              spacing: 12,
-                              children: listChoices
-                                  .map(
-                                    (e) => ChoiceChip(
-                                        labelStyle: TextStyle(
-                                          color: value.pageIndex == e.id
-                                              ? ColorsCollection.WhiteNeutral
-                                              : ColorsCollection.GreyNeutral,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadiusDirectional.circular(
-                                                  40),
-                                        ),
-                                        padding: const EdgeInsets.only(
-                                            left: 16, right: 16),
-                                        labelPadding:
-                                            const EdgeInsets.only(left: 4),
-                                        avatar: Icon(
-                                          value.pageIndex == e.id
-                                              ? e.avataricon
-                                              : e.avataricon,
-                                          color: value.pageIndex == e.id
-                                              ? ColorsCollection.WhiteNeutral
-                                              : ColorsCollection.GreyNeutral,
-                                        ),
-                                        selectedColor:
-                                            ColorsCollection.PrimaryColor,
-                                        backgroundColor:
-                                            ColorsCollection.GreyNeutral02,
-                                        label: Text(e.label),
-                                        selected: value.pageIndex == e.id,
-                                        onSelected: (_) => value.setPage(e.id)),
-                                  )
-                                  .toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : null,
-        body: screen[_selectedIndex],
-        drawer: Drawer(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 40, right: 20, left: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            'images/logocoklat.png',
-                            width: 100,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                _selectedIndex = 0;
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: ListTile(
-                              dense: true,
-                              minLeadingWidth: 12,
-                              leading: const SizedBox(
-                                  width: 26,
-                                  height: 26,
-                                  child: Icon(
-                                    Icons.home,
-                                    color: ColorsCollection.PrimaryColor,
-                                  )),
-                              title: Text('Home',
-                                  style: AppTextStyles.goodMorning),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                _selectedIndex = 1;
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: ListTile(
-                              dense: true,
-                              minLeadingWidth: 12,
-                              leading: const SizedBox(
-                                  width: 26,
-                                  height: 26,
-                                  child: Icon(
-                                    Icons.leaderboard,
-                                    color: ColorsCollection.PrimaryColor,
-                                  )),
-                              title: Text('Report',
-                                  style: AppTextStyles.goodMorning),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                _selectedIndex = 2;
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: ListTile(
-                              dense: true,
-                              minLeadingWidth: 12,
-                              leading: const SizedBox(
-                                  width: 26,
-                                  height: 26,
-                                  child: Icon(
-                                    Icons.local_police,
-                                    color: ColorsCollection.PrimaryColor,
-                                  )),
-                              title: Text('Membership',
-                                  style: AppTextStyles.goodMorning),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: ListTile(
-                              dense: true,
-                              minLeadingWidth: 12,
-                              leading: const SizedBox(
-                                  width: 26,
-                                  height: 26,
-                                  child: Icon(
-                                    Icons.thumb_up_outlined,
-                                    color: ColorsCollection.PrimaryColor,
-                                  )),
-                              title: Text('Suggestion Product',
-                                  style: AppTextStyles.goodMorning),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: ListTile(
-                              dense: true,
-                              minLeadingWidth: 12,
-                              leading: const SizedBox(
-                                  width: 26,
-                                  height: 26,
-                                  child: Icon(
-                                    Icons.help_outline,
-                                    color: ColorsCollection.PrimaryColor,
-                                  )),
-                              title: Text('Manual Guide',
-                                  style: AppTextStyles.goodMorning),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: ListTile(
-                              dense: true,
-                              minLeadingWidth: 12,
-                              leading: const SizedBox(
-                                  width: 26,
-                                  height: 26,
-                                  child: Icon(
-                                    Icons.account_circle,
-                                    color: ColorsCollection.PrimaryColor,
-                                  )),
-                              title: Text('Call Admin',
-                                  style: AppTextStyles.goodMorning),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: ListTile(
-                              dense: true,
-                              minLeadingWidth: 12,
-                              leading: const SizedBox(
-                                  width: 26,
-                                  height: 26,
-                                  child: Icon(
-                                    Icons.report_outlined,
-                                    color: ColorsCollection.PrimaryColor,
-                                  )),
-                              title: Text('Privacy Policy',
-                                  style: AppTextStyles.goodMorning),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: ListTile(
-                              dense: true,
-                              minLeadingWidth: 12,
-                              leading: const SizedBox(
-                                  width: 26,
-                                  height: 26,
-                                  child: Icon(
-                                    Icons.star_outline,
-                                    color: ColorsCollection.PrimaryColor,
-                                  )),
-                              title: Text('Give A Rating',
-                                  style: AppTextStyles.goodMorning),
-                            ),
-                          ),
-                          const SizedBox(height: 50),
-                          InkWell(
-                            onTap: () {
-                              loginViewmodel.logindata
-                                  .setBool('loginCurrent', true);
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => const LoginPage()),
-                                  (route) => false);
-                            },
-                            child: ListTile(
-                              dense: true,
-                              minLeadingWidth: 12,
-                              leading: const SizedBox(
-                                  width: 26,
-                                  height: 26,
-                                  child: Icon(
-                                    Icons.logout,
-                                    color: ColorsCollection.PrimaryColor,
-                                  )),
-                              title: Text('Logout',
-                                  style: AppTextStyles.goodMorning),
-                            ),
-                          ),
-                        ]),
-                  ],
-                ),
-              ),
-              const Spacer(),
-              Container(
-                color: ColorsCollection.PrimaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
+    productProvider = Provider.of<ProductProvider>(context, listen: false);
+    loginViewmodel = Provider.of<LoginVM>(context, listen: false);
+    productProvider.getProducts();
+    return Consumer<ProductProvider>(
+      builder: (context, value, child) => Scaffold(
+          key: _drawerKey,
+          backgroundColor: ColorsCollection.WhiteNeutral,
+          appBar: value.selectedIndex == 0
+              ? AppBar(
+                  toolbarHeight: 210,
+                  titleSpacing: 0,
+                  automaticallyImplyLeading: false,
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  title: Column(
                     children: [
-                      const CircleAvatar(
-                        radius: 20,
-                        backgroundColor: ColorsCollection.unSelectedColor,
-                        backgroundImage: AssetImage('images/aksaracoffe.png'),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: CustomPadding.kSidePadding,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Aksara Coffee',
-                              style: AppTextStyles.titleStyleWhite,
+                            SizedBox(
+                              child: Row(children: [
+                                Builder(
+                                  builder: (BuildContext context) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Scaffold.of(context).openDrawer();
+                                      },
+                                      child: const CircleAvatar(
+                                        radius: 20,
+                                        backgroundColor:
+                                            ColorsCollection.unSelectedColor,
+                                        backgroundImage: AssetImage(
+                                            'images/aksaracoffe.png'),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(width: 12),
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Good Morning',
+                                          style:
+                                              AppTextStyles.subtitleStyleBlack),
+                                      Text('Hello, Aksara Coffee',
+                                          style: AppTextStyles.titleStyleBlack),
+                                    ])
+                              ]),
                             ),
-                            Consumer<LoginVM>(
-                              builder: (context, LoginVM, _) {
-                                LoginVM.checkSharedPreferences();
-                                final username =
-                                    LoginVM.usernameSharedPreference;
-                                print(username);
-                                return Text(
-                                  username.isNotEmpty ? username : 'Guest',
-                                  style: AppTextStyles.subtitleStyleWhite,
-                                );
-                              },
+                            Badge(
+                              alignment: Alignment.topRight,
+                              label: const Text("2"),
+                              smallSize: 10,
+                              child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(
+                                    minWidth: 24,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const CartItems()),
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.shopping_cart_outlined,
+                                    color: ColorsCollection.BlackNeutral,
+                                  )),
                             )
                           ],
                         ),
                       ),
+                      const SizedBox(height: 24),
+                      Padding(
+                        padding: CustomPadding.kSidePadding,
+                        child: TextField(
+                          onChanged: (query) {
+                            if (query.isNotEmpty) {
+                              // Panggil metode pencarian di ViewModel
+                              Provider.of<ProductProvider>(context,
+                                      listen: false)
+                                  .searchProduct(query,
+                                      productProvider.productModel!.results);
+                            } else {
+                              Provider.of<ProductProvider>(context,
+                                      listen: false)
+                                  .clearSearch();
+                            }
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Search',
+                            hintStyle: AppTextStyles.hintTextSearch,
+                            isDense: true,
+                            border: InputBorder.none,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                  color: ColorsCollection.GreyNeutral),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                  color: ColorsCollection.GreyNeutral),
+                            ),
+                            suffixIcon: const Icon(
+                              Icons.search,
+                              size: 24,
+                              color: ColorsCollection.GreyNeutral,
+                            ),
+                          ),
+                          style: AppTextStyles.hintTextSearch,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        height: 50,
+                        child: Consumer<ProductProvider>(
+                          builder: (context, value, child) => ListView(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            children: [
+                              Wrap(
+                                spacing: 12,
+                                children: listChoices
+                                    .map(
+                                      (e) => ChoiceChip(
+                                          labelStyle: TextStyle(
+                                            color: value.pageIndex == e.id
+                                                ? ColorsCollection.WhiteNeutral
+                                                : ColorsCollection.GreyNeutral,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadiusDirectional
+                                                    .circular(40),
+                                          ),
+                                          padding: const EdgeInsets.only(
+                                              left: 16, right: 16),
+                                          labelPadding:
+                                              const EdgeInsets.only(left: 4),
+                                          avatar: Icon(
+                                            value.pageIndex == e.id
+                                                ? e.avataricon
+                                                : e.avataricon,
+                                            color: value.pageIndex == e.id
+                                                ? ColorsCollection.WhiteNeutral
+                                                : ColorsCollection.GreyNeutral,
+                                          ),
+                                          selectedColor:
+                                              ColorsCollection.PrimaryColor,
+                                          backgroundColor:
+                                              ColorsCollection.GreyNeutral02,
+                                          label: Text(e.label),
+                                          selected: value.pageIndex == e.id,
+                                          onSelected: (_) =>
+                                              value.setPage(e.id)),
+                                    )
+                                    .toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : null,
+          body: screen[value.selectedIndex],
+          drawer: Drawer(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 40, right: 20, left: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              'images/logocoklat.png',
+                              width: 100,
+                            ),
+                            InkWell(
+                              onTap: () =>
+                                  productProvider.indexPage1(context, 0),
+                              child: ListTile(
+                                dense: true,
+                                minLeadingWidth: 12,
+                                leading: const SizedBox(
+                                    width: 26,
+                                    height: 26,
+                                    child: Icon(
+                                      Icons.home,
+                                      color: ColorsCollection.PrimaryColor,
+                                    )),
+                                title: Text('Home',
+                                    style: AppTextStyles.goodMorning),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () =>
+                                  productProvider.indexPage1(context, 1),
+                              child: ListTile(
+                                dense: true,
+                                minLeadingWidth: 12,
+                                leading: const SizedBox(
+                                    width: 26,
+                                    height: 26,
+                                    child: Icon(
+                                      Icons.leaderboard,
+                                      color: ColorsCollection.PrimaryColor,
+                                    )),
+                                title: Text('Report',
+                                    style: AppTextStyles.goodMorning),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () =>
+                                  productProvider.indexPage1(context, 0),
+                              child: ListTile(
+                                dense: true,
+                                minLeadingWidth: 12,
+                                leading: const SizedBox(
+                                    width: 26,
+                                    height: 26,
+                                    child: Icon(
+                                      Icons.local_police,
+                                      color: ColorsCollection.PrimaryColor,
+                                    )),
+                                title: Text('Membership',
+                                    style: AppTextStyles.goodMorning),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {},
+                              child: ListTile(
+                                dense: true,
+                                minLeadingWidth: 12,
+                                leading: const SizedBox(
+                                    width: 26,
+                                    height: 26,
+                                    child: Icon(
+                                      Icons.thumb_up_outlined,
+                                      color: ColorsCollection.PrimaryColor,
+                                    )),
+                                title: Text('Suggestion Product',
+                                    style: AppTextStyles.goodMorning),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {},
+                              child: ListTile(
+                                dense: true,
+                                minLeadingWidth: 12,
+                                leading: const SizedBox(
+                                    width: 26,
+                                    height: 26,
+                                    child: Icon(
+                                      Icons.help_outline,
+                                      color: ColorsCollection.PrimaryColor,
+                                    )),
+                                title: Text('Manual Guide',
+                                    style: AppTextStyles.goodMorning),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {},
+                              child: ListTile(
+                                dense: true,
+                                minLeadingWidth: 12,
+                                leading: const SizedBox(
+                                    width: 26,
+                                    height: 26,
+                                    child: Icon(
+                                      Icons.account_circle,
+                                      color: ColorsCollection.PrimaryColor,
+                                    )),
+                                title: Text('Call Admin',
+                                    style: AppTextStyles.goodMorning),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {},
+                              child: ListTile(
+                                dense: true,
+                                minLeadingWidth: 12,
+                                leading: const SizedBox(
+                                    width: 26,
+                                    height: 26,
+                                    child: Icon(
+                                      Icons.report_outlined,
+                                      color: ColorsCollection.PrimaryColor,
+                                    )),
+                                title: Text('Privacy Policy',
+                                    style: AppTextStyles.goodMorning),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {},
+                              child: ListTile(
+                                dense: true,
+                                minLeadingWidth: 12,
+                                leading: const SizedBox(
+                                    width: 26,
+                                    height: 26,
+                                    child: Icon(
+                                      Icons.star_outline,
+                                      color: ColorsCollection.PrimaryColor,
+                                    )),
+                                title: Text('Give A Rating',
+                                    style: AppTextStyles.goodMorning),
+                              ),
+                            ),
+                            const SizedBox(height: 50),
+                            InkWell(
+                              onTap: () {
+                                loginViewmodel.logindata
+                                    .setBool('loginCurrent', true);
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginPage()),
+                                    (route) => false);
+                              },
+                              child: ListTile(
+                                dense: true,
+                                minLeadingWidth: 12,
+                                leading: const SizedBox(
+                                    width: 26,
+                                    height: 26,
+                                    child: Icon(
+                                      Icons.logout,
+                                      color: ColorsCollection.PrimaryColor,
+                                    )),
+                                title: Text('Logout',
+                                    style: AppTextStyles.goodMorning),
+                              ),
+                            ),
+                          ]),
                     ],
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: SizedBox(
-            height: 58,
-            child: ClipRRect(
-              child: BottomNavigationBar(
-                selectedLabelStyle: AppTextStyles.labelStyleButton,
-                unselectedLabelStyle: AppTextStyles.labelStyleButton,
-                selectedFontSize: 10,
-                backgroundColor: ColorsCollection.PrimaryColor,
-                unselectedFontSize: 10,
-                currentIndex: _selectedIndex,
-                onTap: _onItemTapped,
-                selectedItemColor: ColorsCollection.WhiteNeutral,
-                unselectedItemColor: ColorsCollection.unSelectedColor,
-                items: const [
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.local_cafe, size: 24), label: 'Product'),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.leaderboard_outlined, size: 24),
-                    label: 'Report',
+                const Spacer(),
+                Container(
+                  color: ColorsCollection.PrimaryColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: ColorsCollection.unSelectedColor,
+                          backgroundImage: AssetImage('images/aksaracoffe.png'),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Aksara Coffee',
+                                style: AppTextStyles.titleStyleWhite,
+                              ),
+                              Consumer<LoginVM>(
+                                builder: (context, LoginVM, _) {
+                                  LoginVM.checkSharedPreferences();
+                                  final username =
+                                      LoginVM.usernameSharedPreference;
+                                  print(username);
+                                  return Text(
+                                    username.isNotEmpty ? username : 'Guest',
+                                    style: AppTextStyles.subtitleStyleWhite,
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.local_police_outlined, size: 24),
-                      label: 'Member'),
-                ],
-              ),
-            )));
+                ),
+              ],
+            ),
+          ),
+          bottomNavigationBar: SizedBox(
+              height: 58,
+              child: Consumer<ProductProvider>(
+                builder: (context, value, child) => ClipRRect(
+                  child: BottomNavigationBar(
+                    selectedLabelStyle: AppTextStyles.labelStyleButton,
+                    unselectedLabelStyle: AppTextStyles.labelStyleButton,
+                    selectedFontSize: 10,
+                    backgroundColor: ColorsCollection.PrimaryColor,
+                    unselectedFontSize: 10,
+                    currentIndex: value.selectedIndex,
+                    onTap: (value) => productProvider.onItemTapped(value),
+                    selectedItemColor: ColorsCollection.WhiteNeutral,
+                    unselectedItemColor: ColorsCollection.unSelectedColor,
+                    items: const [
+                      BottomNavigationBarItem(
+                          icon: Icon(Icons.local_cafe, size: 24),
+                          label: 'Product'),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.leaderboard_outlined, size: 24),
+                        label: 'Report',
+                      ),
+                      BottomNavigationBarItem(
+                          icon: Icon(Icons.local_police_outlined, size: 24),
+                          label: 'Member'),
+                    ],
+                  ),
+                ),
+              ))),
+    );
   }
 
   void printUserData() async {

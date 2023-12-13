@@ -8,6 +8,8 @@ import 'package:pos_capstone/models/product_model.dart';
 import 'package:pos_capstone/view/payment/payment_detail.dart';
 import 'package:pos_capstone/view/payment/payment_process.dart';
 import 'package:pos_capstone/view/payment/payment_qris.dart';
+import 'package:pos_capstone/viewmodel/view_model_product.dart';
+import 'package:provider/provider.dart';
 
 class CartItems extends StatefulWidget {
   const CartItems({super.key});
@@ -92,95 +94,120 @@ class _CartItemsState extends State<CartItems> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        height: 70,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            image: const DecorationImage(
-                                image: AssetImage("images/kopi1.jpg"),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      flex: 4,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                Consumer<ProductProvider>(
+                  builder: (context, value, child) {
+                    return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: value.cartItems.length,
+                      itemBuilder: (context, index) {
+                        final data = value.cartItems[index];
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "Normal",
-                                style: AppTextStyles.subtitle2,
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 70,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(data.image),
+                                          fit: BoxFit.cover),
+                                      borderRadius: BorderRadius.circular(8)),
+                                ),
                               ),
-                              const Icon(Icons.close, size: 20),
-                            ],
-                          ),
-                          Text(
-                            "Cappucino Espresso",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.titleProduct,
-                          ),
-                          const SizedBox(height: 4),
-                          Text("Rp.23.000",
-                              style: AppTextStyles.subtitleStyleBlack),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CustomButton(
-                                  height: 30,
-                                  width: 90,
-                                  iconData: Icons.edit_outlined,
-                                  buttonType: ButtonType.outlineWithIcon,
-                                  text: "edit",
-                                  onPressed: () {}),
-                              SizedBox(
-                                width: 80,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                              const SizedBox(width: 20),
+                              Expanded(
+                                flex: 4,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      height: 24,
-                                      width: 24,
-                                      decoration: BoxDecoration(
-                                          color: ColorsCollection.GreyNeutral02,
-                                          borderRadius:
-                                              BorderRadius.circular(6)),
-                                      child: const Icon(Icons.remove, size: 14),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          data.nameSize,
+                                          style: AppTextStyles.subtitle2,
+                                        ),
+                                        const Icon(Icons.close, size: 20),
+                                      ],
                                     ),
-                                    const Text("1"),
-                                    Container(
-                                      height: 24,
-                                      width: 24,
-                                      decoration: BoxDecoration(
-                                          color: ColorsCollection.GreyNeutral02,
-                                          borderRadius:
-                                              BorderRadius.circular(6)),
-                                      child: const Icon(
-                                        Icons.add,
-                                        size: 14,
-                                      ),
+                                    Text(
+                                      data.name,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppTextStyles.titleProduct,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(data.price.toString(),
+                                        style:
+                                            AppTextStyles.subtitleStyleBlack),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        CustomButton(
+                                            height: 30,
+                                            width: 90,
+                                            iconData: Icons.edit_outlined,
+                                            buttonType:
+                                                ButtonType.outlineWithIcon,
+                                            text: "edit",
+                                            onPressed: () {}),
+                                        SizedBox(
+                                          width: 80,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                height: 24,
+                                                width: 24,
+                                                decoration: BoxDecoration(
+                                                    color: ColorsCollection
+                                                        .GreyNeutral02,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6)),
+                                                child: const Icon(Icons.remove,
+                                                    size: 14),
+                                              ),
+                                              Text(data.amount.toString()),
+                                              Container(
+                                                height: 24,
+                                                width: 24,
+                                                decoration: BoxDecoration(
+                                                    color: ColorsCollection
+                                                        .GreyNeutral02,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6)),
+                                                child: const Icon(
+                                                  Icons.add,
+                                                  size: 14,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
+                        );
+                      },
+                    );
+                  },
                 ),
                 const SizedBox(height: 10),
                 TextField(
@@ -262,6 +289,7 @@ class _CartItemsState extends State<CartItems> {
                     Text('Rp. 28.600', style: AppTextStyles.subtitleStyle),
                   ],
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

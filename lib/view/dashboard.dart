@@ -18,14 +18,15 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   late ProductProvider productProvider;
-  @override
-  void initState() {
-    super.initState();
-    productProvider = Provider.of(context, listen: false);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   productProvider = Provider.of(context, listen: false);
+  // }
 
   @override
   Widget build(BuildContext context) {
+    productProvider = Provider.of(context, listen: false);
     return SingleChildScrollView(
         child: Consumer<ProductProvider>(builder: (context, provider, child) {
       if (provider.isLoading) {
