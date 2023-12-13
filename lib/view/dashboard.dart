@@ -105,10 +105,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: NetworkImage(provider
-                                            .productModel!
-                                            .results[index]
-                                            .image),
+                                        image:
+                                            NetworkImage(productDetail.image),
                                         fit: BoxFit.cover),
                                     borderRadius: BorderRadius.circular(12)),
                               ),
@@ -121,8 +119,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                provider
-                                    .productModel!.results[index].ingredients,
+                                productDetail.ingredients,
                                 style: AppTextStyles.descriptionProduct,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
