@@ -17,7 +17,7 @@ class ProductProvider with ChangeNotifier {
   Future<void> getProducts() async {
     try {
       isLoading = true;
-      notifyListeners();
+
       productModel = await services.fetchProducts(producttypeid: pageIndex);
       isLoading = false;
     } catch (e) {

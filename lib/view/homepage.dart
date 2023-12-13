@@ -9,6 +9,7 @@ import 'package:pos_capstone/view/cart/cartitem.dart';
 import 'package:pos_capstone/view/chip/model.dart';
 import 'package:pos_capstone/view/dashboard.dart';
 import 'package:pos_capstone/view/membership/membership_list.dart';
+import 'package:pos_capstone/view/productsuggestion/product_suggestion.dart';
 import 'package:pos_capstone/view/reportpage/report.dart';
 import 'package:pos_capstone/viewmodel/view_model_login.dart';
 import 'package:pos_capstone/viewmodel/view_model_product.dart';
@@ -312,7 +313,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              setState(() {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ChatbotPage()),
+                                );
+                              });
+                            },
                             child: ListTile(
                               dense: true,
                               minLeadingWidth: 12,

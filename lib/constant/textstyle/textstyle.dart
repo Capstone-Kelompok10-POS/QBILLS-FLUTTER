@@ -105,4 +105,12 @@ class AppTextStyles {
       fontSize: 16,
       fontWeight: FontWeight.w600,
       color: ColorsCollection.WhiteNeutral);
+  static TextStyle appBarChatbot = GoogleFonts.openSans(
+      fontSize: 18,
+      fontWeight: FontWeight.w400,
+      color: ColorsCollection.WhiteNeutral);
+  static TextStyle messageChatbot = GoogleFonts.openSans(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      color: ColorsCollection.WhiteNeutral);
 }
