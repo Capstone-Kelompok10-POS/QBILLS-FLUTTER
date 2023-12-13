@@ -4,12 +4,13 @@ import 'package:pos_capstone/constant/button/button_collection.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
+import 'package:pos_capstone/models/product_model.dart';
 
 import 'package:pos_capstone/view/cart/cartitem.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({super.key});
-
+  const ProductDetailScreen({super.key, required this.data});
+  final Result data;
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
@@ -30,6 +31,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     CoffeeSize(3, 'images/cup.png', 'Big', '320ml'),
   ];
   var idSelected = 1;
+  int quantity = 1;
+  double totalPrice = 0;
+
+  void updateTotalPrice() {
+    setState(() {
+      totalPrice = data.productDetail[0].price * quantity.toDouble();
+    });
+  }
+
+  late final Result data;
+  late final ProductDetail datadetail;
+  @override
+  void initState() {
+    super.initState();
+    data = widget.data;
+    totalPrice = data.productDetail[0].price * quantity.toDouble();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +76,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CartItems()),
+                    MaterialPageRoute(builder: (context) => CartItems()),
                   );
                 },
                 icon: const Icon(
@@ -71,12 +90,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             clipBehavior: Clip.none,
             children: [
               SizedBox(
-                height: 300,
-                child: Image.asset(
-                  "images/kopi1.jpg",
-                  fit: BoxFit.cover,
-                ),
-              ),
+                  height: 300,
+                  child: Image(
+                    image: NetworkImage(data.image),
+                    fit: BoxFit.cover,
+                  )),
               Padding(
                 padding: const EdgeInsets.only(top: 280),
                 child: Container(
@@ -94,15 +112,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 24),
-                          Text('Cappucino Espresso',
+                          Text(data.name,
                               style: AppTextStyles.titleStyleBlack1),
                           const SizedBox(height: 20),
-                          const Divider(),
+                          const Divider(
+                            thickness: 0.8,
+                          ),
                           const SizedBox(height: 20),
                           Text('Ingredients', style: AppTextStyles.title2),
                           const SizedBox(height: 8),
-                          Text(
-                              'The main ingredients in milk coffee is coffee, which is ground coffee or coffee extract. Soy milk is also a key component. In addition, sugar is added according to the dosage to provide a sweet taste.',
+                          Text(data.ingredients,
                               style: AppTextStyles.subtitleStyle),
                           const SizedBox(height: 20),
                           Text('Size', style: AppTextStyles.title2),
@@ -219,11 +238,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         child: Row(
                           children: [
                             Text(
-                              "Total :",
+                              "Total : ",
                               style: AppTextStyles.subtitleStyleBlack,
                             ),
                             Text(
-                              " Rp.26.000",
+                              "Rp.${totalPrice.toStringAsFixed(0)}",
                               style: AppTextStyles.titleStyleBlack,
                             )
                           ],
@@ -234,28 +253,48 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              height: 24,
-                              width: 24,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 1,
-                                      color: ColorsCollection.GreyNeutral02),
-                                  borderRadius: BorderRadius.circular(6)),
-                              child: const Icon(Icons.remove, size: 14),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (quantity > 1) {
+                                    quantity--; // Decrease quantity
+                                    updateTotalPrice();
+                                  }
+                                });
+                              },
+                              child: Container(
+                                height: 24,
+                                width: 24,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 1,
+                                        color: ColorsCollection.GreyNeutral02),
+                                    borderRadius: BorderRadius.circular(6)),
+                                child: const Icon(Icons.remove, size: 14),
+                              ),
                             ),
-                            const Text("1"),
-                            Container(
-                              height: 24,
-                              width: 24,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 1,
-                                      color: ColorsCollection.GreyNeutral02),
-                                  borderRadius: BorderRadius.circular(6)),
-                              child: const Icon(
-                                Icons.add,
-                                size: 14,
+                            Text(quantity.toString()),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  setState(() {
+                                    quantity++; // Increase quantity
+                                    updateTotalPrice(); // Update total price
+                                  });
+                                });
+                              },
+                              child: Container(
+                                height: 24,
+                                width: 24,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 1,
+                                        color: ColorsCollection.GreyNeutral02),
+                                    borderRadius: BorderRadius.circular(6)),
+                                child: const Icon(
+                                  Icons.add,
+                                  size: 14,
+                                ),
                               ),
                             ),
                           ],
@@ -270,8 +309,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const CartItems()),
+                        MaterialPageRoute(builder: (context) => CartItems()),
                       );
                     },
                     buttonType: ButtonType.withIcon,

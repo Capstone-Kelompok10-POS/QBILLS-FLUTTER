@@ -86,11 +86,11 @@ class LoginVM with ChangeNotifier {
     newUser = logindata.getBool("login") ?? true;
     if (newUser == false) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const LoginPage()),
+          MaterialPageRoute(builder: (context) => const WelcomePage()),
           (route) => false);
     } else {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const WelcomePage()),
+          MaterialPageRoute(builder: (context) => const LoginPage()),
           (route) => false);
     }
   }
