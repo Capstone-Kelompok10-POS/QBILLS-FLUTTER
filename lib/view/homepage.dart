@@ -138,6 +138,17 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: CustomPadding.kSidePadding,
                       child: TextField(
+                        onChanged: (query) {
+                          if (query.isNotEmpty) {
+                            // Panggil metode pencarian di ViewModel
+                            Provider.of<ProductProvider>(context, listen: false)
+                                .searchProduct(query,
+                                    productProvider.productModel!.results);
+                          } else {
+                            Provider.of<ProductProvider>(context, listen: false)
+                                .clearSearch();
+                          }
+                        },
                         decoration: InputDecoration(
                           hintText: 'Search',
                           hintStyle: AppTextStyles.hintTextSearch,

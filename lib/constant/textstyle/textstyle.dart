@@ -101,4 +101,8 @@ class AppTextStyles {
       fontSize: 14,
       fontWeight: FontWeight.normal,
       color: ColorsCollection.ErrorColor);
+  static TextStyle cardNameTittle = GoogleFonts.openSans(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: ColorsCollection.WhiteNeutral);
 }

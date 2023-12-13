@@ -4,8 +4,12 @@ import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
 
 class MemberDetailsPage extends StatelessWidget {
-  const MemberDetailsPage({super.key});
+  final String name;
+  final int totalPoint;
 
+  const MemberDetailsPage(
+      {Key? key, required this.name, required this.totalPoint})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,17 +39,42 @@ class MemberDetailsPage extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             Text(
-              "210",
+              totalPoint.toString(),
               style: AppTextStyles.titleStyleBlack1,
             ),
             Text(
               "Member Point",
               style: AppTextStyles.subtitleStyle,
             ),
-            SizedBox(
-              width: 500,
-              child: Image.asset("images/membercard.png"),
+            const SizedBox(height: 12),
+            Stack(
+              children: [
+                Image.asset(
+                  "images/cardmembership.png",
+                  width: 300,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  left: 10,
+                  bottom: 12,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        child: Text(
+                          name,
+                          style: AppTextStyles.cardNameTittle,
+                          maxLines: 2, // Jumlah maksimal baris
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 24),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(

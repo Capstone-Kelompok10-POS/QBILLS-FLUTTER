@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:pos_capstone/viewmodel/view_model_membership.dart';
+import 'package:provider/provider.dart';
+import 'package:pos_capstone/models/membership_model.dart';
+import 'package:pos_capstone/view/membership/membership_add.dart';
+import 'package:pos_capstone/view/membership/membership_details.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
-import 'package:pos_capstone/view/membership/membership_add.dart';
-import 'package:pos_capstone/view/membership/membership_details.dart';
 
-class MembershipListPage extends StatelessWidget {
-  const MembershipListPage({super.key});
+class MembershipListPage extends StatefulWidget {
+  const MembershipListPage({Key? key}) : super(key: key);
+
+  @override
+  State<MembershipListPage> createState() => _MembershipListPageState();
+}
+
+class _MembershipListPageState extends State<MembershipListPage> {
+  late MembershipProvider membershipProvider;
 
   @override
   Widget build(BuildContext context) {
+    membershipProvider =
+        Provider.of<MembershipProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      membershipProvider.getMembers();
+    });
     return Scaffold(
       backgroundColor: ColorsCollection.WhiteNeutral,
       appBar: AppBar(
@@ -27,6 +42,17 @@ class MembershipListPage extends StatelessWidget {
               Text("Membership List", style: AppTextStyles.appbartitle),
               const SizedBox(height: 20),
               TextField(
+                onChanged: (query) {
+                  if (query.isNotEmpty) {
+                    // Panggil metode pencarian di ViewModel
+                    Provider.of<MembershipProvider>(context, listen: false)
+                        .searchMembers(
+                            query, membershipProvider.membershipModel!.results);
+                  } else {
+                    Provider.of<MembershipProvider>(context, listen: false)
+                        .clearSearch();
+                  }
+                },
                 decoration: InputDecoration(
                   hintText: 'Search',
                   hintStyle: AppTextStyles.hintTextSearch,
@@ -56,13 +82,36 @@ class MembershipListPage extends StatelessWidget {
       ),
       body: Padding(
         padding: CustomPadding.kSidePadding,
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (BuildContext context, int index) {
+        child: Consumer<MembershipProvider>(
+          builder: (context, provider, child) {
+            if (provider.isLoading) {
+              return const Center(
+                  child: CircularProgressIndicator(
+                color: ColorsCollection.PrimaryColor,
+              ));
+            } else {
+              return ListView.builder(
+                itemCount: provider.membershipModel!.results.length,
+                itemBuilder: (_, index) {
+                  Result result;
+                  if (provider.isSearching) {
+                    if (index < provider.filteredResults.length) {
+                      result = provider.filteredResults[index];
+                    } else {
+                      // Handle case when index is out of range
+                      // (You can return an empty widget or handle it based on your use case)
+                      return Container();
+                    }
+                  } else {
+                    if (index < provider.membershipModel!.results.length) {
+                      result = provider.membershipModel!.results[index];
+                    } else {
+                      // Handle case when index is out of range
+                      // (You can return an empty widget or handle it based on your use case)
+                      return Container();
+                    }
+                  }
+
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: Card(
@@ -88,16 +137,14 @@ class MembershipListPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 16.0),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Maren Vetro",
-                                      style: AppTextStyles.titleStyleBlack),
-                                  Text("08123456789",
-                                      style: AppTextStyles.subtitleStyle),
-                                ],
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(result.name,
+                                    style: AppTextStyles.titleStyleBlack),
+                                Text(result.phoneNumber,
+                                    style: AppTextStyles.subtitleStyle),
+                              ],
                             ),
                             const Spacer(),
                             IconButton(
@@ -106,8 +153,11 @@ class MembershipListPage extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const MemberDetailsPage()),
+                                    builder: (context) => MemberDetailsPage(
+                                      name: result.name,
+                                      totalPoint: result.totalPoint,
+                                    ),
+                                  ),
                                 );
                               },
                             ),
@@ -117,14 +167,14 @@ class MembershipListPage extends StatelessWidget {
                     ),
                   );
                 },
-              ),
-            ),
-          ],
+              );
+            }
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MembershipScreen()),
           );

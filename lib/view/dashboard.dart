@@ -64,6 +64,23 @@ class _DashboardPageState extends State<DashboardPage> {
                     itemBuilder: (_, index) {
                       Result productDetail =
                           provider.productModel!.results[index];
+                      if (provider.isSearching) {
+                        if (index < provider.filteredResults.length) {
+                          productDetail = provider.filteredResults[index];
+                        } else {
+                          // Handle case when index is out of range
+                          // (You can return an empty widget or handle it based on your use case)
+                          return Container();
+                        }
+                      } else {
+                        if (index < provider.productModel!.results.length) {
+                          productDetail = provider.productModel!.results[index];
+                        } else {
+                          // Handle case when index is out of range
+                          // (You can return an empty widget or handle it based on your use case)
+                          return Container();
+                        }
+                      }
                       print(productDetail);
                       return Container(
                         decoration: BoxDecoration(
@@ -97,7 +114,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                provider.productModel!.results[index].name,
+                                productDetail.name,
                                 style: AppTextStyles.titleProduct,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

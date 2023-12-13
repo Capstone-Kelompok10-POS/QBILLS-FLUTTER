@@ -9,6 +9,10 @@ class ProductProvider with ChangeNotifier {
   String accessToken = "";
   bool isLoading = true;
   int pageIndex = 1;
+  List<Result> _filteredResults = [];
+  bool _isSearching = false;
+  bool get isSearching => _isSearching;
+  List<Result> get filteredResults => _filteredResults;
 
   Future<void> getProducts() async {
     try {
@@ -31,6 +35,27 @@ class ProductProvider with ChangeNotifier {
       pageIndex = index;
       await getProducts();
     }
+    notifyListeners();
+  }
+
+  void searchProduct(String query, List<Result> allProduct) {
+    if (query.isNotEmpty) {
+      _filteredResults = allProduct
+          .where((result) =>
+              result.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      _isSearching = true;
+    } else {
+      _filteredResults.clear();
+      _isSearching = false;
+    }
+
+    notifyListeners();
+  }
+
+  void clearSearch() {
+    _filteredResults.clear();
+    _isSearching = false;
     notifyListeners();
   }
 }

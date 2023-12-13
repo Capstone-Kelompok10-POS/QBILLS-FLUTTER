@@ -4,12 +4,16 @@ import 'package:pos_capstone/constant/button/button_collection.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/textfield/textfield.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
+import 'package:pos_capstone/service/membership_service.dart';
+import 'package:pos_capstone/view/membership/membership_list.dart';
+import 'package:pos_capstone/viewmodel/view_model_add_membership.dart';
 
 class MembershipScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final MembershipViewModel membershipService = MembershipViewModel();
 
-  MembershipScreen({super.key});
+  MembershipScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +37,12 @@ class MembershipScreen extends StatelessWidget {
             Text("Add Membership", style: AppTextStyles.titleStyleBrown),
             const SizedBox(height: 8.0),
             Text(
-                "Build better relationships with customers by making them part of us",
-                style: AppTextStyles.subtitleStyle),
+              "Build better relationships with customers by making them part of us",
+              style: AppTextStyles.subtitleStyle,
+            ),
             const SizedBox(height: 16.0),
             CustomTextField(
-              controller: TextEditingController(),
+              controller: nameController,
               hintText: "Name",
               fieldType: CustomTextFieldType.withIcon,
               prefixIcon: Icons.person,
@@ -45,7 +50,7 @@ class MembershipScreen extends StatelessWidget {
             const SizedBox(height: 16.0),
             CustomTextField(
               keyboardType: TextInputType.phone,
-              controller: TextEditingController(),
+              controller: phoneController,
               hintText: "Phone",
               fieldType: CustomTextFieldType.withIcon,
               prefixIcon: Icons.phone,
@@ -59,7 +64,20 @@ class MembershipScreen extends StatelessWidget {
                   height: 48,
                   child: CustomButton(
                     text: "Add",
-                    onPressed: () {},
+                    onPressed: () {
+                      if (!membershipService.isAdding) {
+                        membershipService.addMembershipp(
+                          nameController.text,
+                          phoneController.text,
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MembershipListPage(),
+                            ),
+                          ),
+                        );
+                      }
+                    },
                     buttonType: ButtonType.filled,
                   ),
                 ),
