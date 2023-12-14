@@ -22,7 +22,10 @@ class ProductProvider with ChangeNotifier {
   Future<void> getProducts() async {
     isLoading = true;
     productModel = await services.fetchProducts(producttypeid: pageIndex);
+    print(productModel!.results.length);
+    print("ini controller product");
     isLoading = false;
+    _isSearching = false;
     notifyListeners();
   }
 

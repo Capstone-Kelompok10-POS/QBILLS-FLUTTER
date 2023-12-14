@@ -8,7 +8,7 @@ class ChatbotProvider with ChangeNotifier {
   bool _isLoading = false;
   bool _isSending = false;
   bool get isSending => _isSending;
-  
+
   List<ChatMessage> get messages => _messages;
   bool get isLoading => _isLoading;
 
