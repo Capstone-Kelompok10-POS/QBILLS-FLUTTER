@@ -1,4 +1,7 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
+import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/viewmodel/view_model_chatbot.dart';
 import 'package:provider/provider.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
@@ -48,53 +51,56 @@ class _ChatbotPageState extends State<ChatbotPage> {
                     itemCount: chatbotProvider.messages.length,
                     itemBuilder: (context, index) {
                       final message = chatbotProvider.messages[index];
-
-                      return Row(
-                        mainAxisAlignment: message.isUser
-                            ? MainAxisAlignment.end
-                            : MainAxisAlignment.start,
-                        children: [
-                          if (!message.isUser)
-                            CircleAvatar(
-                              backgroundColor: ColorsCollection.GreyNeutral,
-                              child: Text(
-                                'B',
-                                style: AppTextStyles.appBarChatbot,
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          mainAxisAlignment: message.isUser
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.start,
+                          children: [
+                            if (!message.isUser)
+                              CircleAvatar(
+                                backgroundColor: ColorsCollection.GreyNeutral,
+                                child: Text(
+                                  'B',
+                                  style: AppTextStyles.appBarChatbot,
+                                ),
+                              ),
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(12.0),
+                                decoration: BoxDecoration(
+                                  color: message.isUser
+                                      ? ColorsCollection.PrimaryColor
+                                      : ColorsCollection.GreyNeutral,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Text(
+                                  message.text,
+                                  style: AppTextStyles.messageChatbot,
+                                ),
                               ),
                             ),
-                          Expanded(
-                            child: Container(
-                              margin: const EdgeInsets.all(8.0),
-                              padding: const EdgeInsets.all(12.0),
-                              decoration: BoxDecoration(
-                                color: message.isUser
-                                    ? ColorsCollection.PrimaryColor
-                                    : ColorsCollection.GreyNeutral,
-                                borderRadius: BorderRadius.circular(8.0),
+                            if (message.isUser)
+                              CircleAvatar(
+                                // Ganti dengan foto profil chatbot jika ada
+                                backgroundColor: ColorsCollection.PrimaryColor,
+                                // Ganti dengan foto profil chatbot jika ada
+                                child: Text(
+                                  'U',
+                                  style: AppTextStyles.appBarChatbot,
+                                ),
                               ),
-                              child: Text(
-                                message.text,
-                                style: AppTextStyles.messageChatbot,
-                              ),
-                            ),
-                          ),
-                          if (message.isUser)
-                            CircleAvatar(
-                              // Ganti dengan foto profil chatbot jika ada
-                              backgroundColor: ColorsCollection.PrimaryColor,
-                              // Ganti dengan foto profil chatbot jika ada
-                              child: Text(
-                                'U',
-                                style: AppTextStyles.appBarChatbot,
-                              ),
-                            ),
-                        ],
+                          ],
+                        ),
                       );
                     },
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(
+                      top: 8, bottom: 8, left: 20, right: 10),
                   child: Row(
                     children: [
                       Expanded(
@@ -108,6 +114,8 @@ class _ChatbotPageState extends State<ChatbotPage> {
                         ),
                       ),
                       IconButton(
+                        constraints:
+                            const BoxConstraints(minWidth: 24, minHeight: 24),
                         icon: Icon(
                           Icons.send,
                           color: chatbotProvider.isSending

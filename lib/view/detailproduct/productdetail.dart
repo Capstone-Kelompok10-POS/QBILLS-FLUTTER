@@ -62,46 +62,74 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return Scaffold(
         backgroundColor: ColorsCollection.WhiteNeutral,
         appBar: AppBar(
-          title: Text(
-            'Detail Item',
-            style: AppTextStyles.appbartitle,
-          ),
-          elevation: 0,
-          titleSpacing: 0,
-          leading: IconButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: ColorsCollection.BlackNeutral,
-              )),
-          backgroundColor: ColorsCollection.WhiteNeutral,
-          actions: [
-            IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CartItems()),
-                  );
-                },
-                icon: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: ColorsCollection.BlackNeutral,
-                ))
-          ],
-        ),
+            elevation: 0,
+            backgroundColor: ColorsCollection.WhiteNeutral,
+            automaticallyImplyLeading: false,
+            title: Padding(
+              padding: const EdgeInsets.only(right: 8, left: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    child: Row(
+                      children: [
+                        IconButton(
+                            constraints: const BoxConstraints(
+                                minWidth: 24, minHeight: 24),
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back_ios,
+                              color: ColorsCollection.BlackNeutral,
+                            )),
+                        const SizedBox(width: 10),
+                        Text(
+                          'Detail Item',
+                          style: AppTextStyles.appbartitle,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Consumer<ProductProvider>(
+                    builder: (context, value, child) {
+                      return Badge(
+                        alignment: Alignment.topRight,
+                        label: Text(value.cartItems.length.toString()),
+                        smallSize: 10,
+                        child: IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(
+                                minWidth: 24, minHeight: 24),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const CartItems()),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.shopping_cart_outlined,
+                              color: ColorsCollection.BlackNeutral,
+                            )),
+                      );
+                    },
+                  )
+                ],
+              ),
+            )),
         body: SingleChildScrollView(
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              SizedBox(
+              Container(
+                  color: Colors.red,
                   height: 300,
+                  width: double.infinity,
                   child: Image(
                     image: NetworkImage(data.image),
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fitWidth,
                   )),
               Padding(
                 padding: const EdgeInsets.only(top: 280),
@@ -339,7 +367,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CartItems()),
+                                builder: (context) => const CartItems()),
                           );
                         },
                         buttonType: ButtonType.withIcon,
