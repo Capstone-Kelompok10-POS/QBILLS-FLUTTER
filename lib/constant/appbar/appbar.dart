@@ -73,7 +73,7 @@ class _AppbarProductState extends State<AppbarProduct> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CartItems()),
+                            builder: (context) => const CartDetail()),
                       );
                     },
                     icon: const Icon(

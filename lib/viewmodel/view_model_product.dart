@@ -103,4 +103,19 @@ class ProductProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void removeCartItem(int index) {
+    if (index < cartItems.length) {
+      cartItems.removeAt(index);
+      notifyListeners(); // Panggil ini agar widget terupdate setelah perubahan
+    }
+  }
+
+  double calculateTotalPrice(List<CartItem> cartItems) {
+    double total = 0;
+    for (var item in cartItems) {
+      total += item.price * item.amount;
+    }
+    return total;
+  }
 }

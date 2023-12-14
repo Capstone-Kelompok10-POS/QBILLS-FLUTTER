@@ -4,23 +4,25 @@ import 'package:pos_capstone/constant/button/button_collection.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
-import 'package:pos_capstone/models/product_model.dart';
 import 'package:pos_capstone/view/payment/payment_detail.dart';
 import 'package:pos_capstone/view/payment/payment_process.dart';
 import 'package:pos_capstone/view/payment/payment_qris.dart';
 import 'package:pos_capstone/viewmodel/view_model_product.dart';
 import 'package:provider/provider.dart';
 
-class CartItems extends StatefulWidget {
-  const CartItems({super.key});
+class CartDetail extends StatefulWidget {
+  const CartDetail({super.key});
 
   @override
-  State<CartItems> createState() => _CartItemsState();
+  State<CartDetail> createState() => _CartDetailState();
 }
 
-class _CartItemsState extends State<CartItems> {
+class _CartDetailState extends State<CartDetail> {
   int _selectedRadio = 0;
   bool _isExpanded = false;
+  late int amount = 1;
+  double totalPrice = 0;
+  late ProductProvider productProvider;
 
   double _calculateBottomSheetHeight() {
     double baseHeight = 400;
@@ -61,254 +63,332 @@ class _CartItemsState extends State<CartItems> {
               ),
             );
           } else {
+            totalPrice = value.calculateTotalPrice(value.cartItems);
             return SingleChildScrollView(
               child: Padding(
                 padding: CustomPadding.kSidePadding,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text('Search membership',
-                        style: AppTextStyles.titleProduct),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 40,
-                      child: TextField(
-                        decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            hintText: "Phone Number",
-                            hintStyle: AppTextStyles.hintstyletext,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                width: 1,
-                                color: ColorsCollection.GreyNeutral02,
-                              ),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: ColorsCollection.GreyNeutral02,
-                              ),
-                            ),
-                            suffixIcon: SizedBox(
-                              width: 100,
-                              child: CustomButton(
-                                  buttonType: ButtonType.filled,
-                                  text: "Search",
-                                  onPressed: () {}),
-                            )),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Consumer<ProductProvider>(
-                      builder: (context, value, child) {
-                        return ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: value.cartItems.length,
-                          itemBuilder: (context, index) {
-                            final data = value.cartItems[index];
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 20),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      height: 70,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: NetworkImage(data.image),
-                                              fit: BoxFit.cover),
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                    ),
+                child: Consumer(
+                  builder: (context, value, child) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text('Search membership',
+                            style: AppTextStyles.titleProduct),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: 40,
+                          child: TextField(
+                            decoration: InputDecoration(
+                                contentPadding:
+                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                hintText: "Phone Number",
+                                hintStyle: AppTextStyles.hintstyletext,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: ColorsCollection.GreyNeutral02,
                                   ),
-                                  const SizedBox(width: 20),
-                                  Expanded(
-                                    flex: 4,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    color: ColorsCollection.GreyNeutral02,
+                                  ),
+                                ),
+                                suffixIcon: SizedBox(
+                                  width: 100,
+                                  child: CustomButton(
+                                      buttonType: ButtonType.filled,
+                                      text: "Search",
+                                      onPressed: () {}),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Consumer<ProductProvider>(
+                          builder: (context, value, child) {
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: value.cartItems.length,
+                              itemBuilder: (context, index) {
+                                final data = value.cartItems[index];
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 20),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          height: 70,
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image:
+                                                      NetworkImage(data.image),
+                                                  fit: BoxFit.cover),
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 20),
+                                      Expanded(
+                                        flex: 4,
+                                        child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              data.nameSize,
-                                              style: AppTextStyles.subtitle2,
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  data.nameSize,
+                                                  style:
+                                                      AppTextStyles.subtitle2,
+                                                ),
+                                                IconButton(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .zero,
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            minHeight: 24,
+                                                            minWidth: 24),
+                                                    onPressed: () {
+                                                      Provider.of<ProductProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .removeCartItem(
+                                                              index);
+                                                    },
+                                                    icon: const Icon(
+                                                        Icons.close,
+                                                        size: 20))
+                                              ],
                                             ),
-                                            const Icon(Icons.close, size: 20),
-                                          ],
-                                        ),
-                                        Text(
-                                          data.name,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: AppTextStyles.titleProduct,
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(data.price.toString(),
-                                            style: AppTextStyles
-                                                .subtitleStyleBlack),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            CustomButton(
-                                                height: 30,
-                                                width: 90,
-                                                iconData: Icons.edit_outlined,
-                                                buttonType:
-                                                    ButtonType.outlineWithIcon,
-                                                text: "edit",
-                                                onPressed: () {}),
-                                            SizedBox(
-                                              width: 80,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Container(
-                                                    height: 24,
-                                                    width: 24,
-                                                    decoration: BoxDecoration(
-                                                        color: ColorsCollection
-                                                            .GreyNeutral02,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(6)),
-                                                    child: const Icon(
-                                                        Icons.remove,
-                                                        size: 14),
+                                            Text(
+                                              data.name,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: AppTextStyles.titleProduct,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                                (value.cartItems[index].price *
+                                                        value.cartItems[index]
+                                                            .amount)
+                                                    .toString(),
+                                                style: AppTextStyles
+                                                    .subtitleStyleBlack),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                CustomButton(
+                                                    height: 30,
+                                                    width: 90,
+                                                    iconData:
+                                                        Icons.edit_outlined,
+                                                    buttonType: ButtonType
+                                                        .outlineWithIcon,
+                                                    text: "edit",
+                                                    onPressed: () {}),
+                                                SizedBox(
+                                                  width: 80,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            if (value
+                                                                    .cartItems[
+                                                                        index]
+                                                                    .amount >
+                                                                1) {
+                                                              value
+                                                                  .cartItems[
+                                                                      index]
+                                                                  .amount--;
+                                                              totalPrice -= value
+                                                                  .cartItems[
+                                                                      index]
+                                                                  .price; // Kurangi jumlah produk
+                                                              // Perbarui harga total produk
+                                                            }
+                                                          });
+                                                        },
+                                                        child: Container(
+                                                          height: 24,
+                                                          width: 24,
+                                                          decoration: BoxDecoration(
+                                                              color: ColorsCollection
+                                                                  .GreyNeutral02,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          6)),
+                                                          child: const Icon(
+                                                              Icons.remove,
+                                                              size: 14),
+                                                        ),
+                                                      ),
+                                                      Text(value
+                                                          .cartItems[index]
+                                                          .amount
+                                                          .toString()),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            value
+                                                                .cartItems[
+                                                                    index]
+                                                                .amount++;
+                                                            totalPrice -= value
+                                                                .cartItems[
+                                                                    index]
+                                                                .price; // Tambah jumlah produk
+                                                            // Perbarui harga total produk
+                                                          });
+                                                        },
+                                                        child: Container(
+                                                          height: 24,
+                                                          width: 24,
+                                                          decoration: BoxDecoration(
+                                                              color: ColorsCollection
+                                                                  .GreyNeutral02,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          6)),
+                                                          child: const Icon(
+                                                            Icons.add,
+                                                            size: 14,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  Text(data.amount.toString()),
-                                                  Container(
-                                                    height: 24,
-                                                    width: 24,
-                                                    decoration: BoxDecoration(
-                                                        color: ColorsCollection
-                                                            .GreyNeutral02,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(6)),
-                                                    child: const Icon(
-                                                      Icons.add,
-                                                      size: 14,
-                                                    ),
-                                                  ),
-                                                ],
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            TextField(
+                                              decoration: InputDecoration(
+                                                hintText:
+                                                    "Please note anything",
+                                                hintStyle:
+                                                    AppTextStyles.hintText,
+                                                enabledBorder:
+                                                    const UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: ColorsCollection
+                                                          .GreyNeutral02),
+                                                ),
+                                                focusedBorder:
+                                                    const UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: ColorsCollection
+                                                          .GreyNeutral02),
+                                                ),
                                               ),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 10),
-                                        TextField(
-                                          decoration: InputDecoration(
-                                            hintText: "Please note anything",
-                                            hintStyle: AppTextStyles.hintText,
-                                            enabledBorder:
-                                                const UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: ColorsCollection
-                                                      .GreyNeutral02),
-                                            ),
-                                            focusedBorder:
-                                                const UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: ColorsCollection
-                                                      .GreyNeutral02),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      height: 40,
-                      child: TextField(
-                        decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            hintText: "Change Point",
-                            hintStyle: AppTextStyles.hintstyletext,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                width: 1,
-                                color: ColorsCollection.GreyNeutral02,
-                              ),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: ColorsCollection.GreyNeutral02,
-                              ),
-                            ),
-                            suffixIcon: SizedBox(
-                              width: 100,
-                              child: CustomButton(
-                                  buttonType: ButtonType.filled,
-                                  text: "Apply",
-                                  onPressed: () {}),
-                            )),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Point Tersedia: 0',
-                      style: AppTextStyles.subtitleStyle,
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'Payment Details',
-                      style: AppTextStyles.titleProduct,
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Price', style: AppTextStyles.subtitleStyle),
-                        Text('Rp. 26.000', style: AppTextStyles.subtitleStyle),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          height: 40,
+                          child: TextField(
+                            decoration: InputDecoration(
+                                contentPadding:
+                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                hintText: "Change Point",
+                                hintStyle: AppTextStyles.hintstyletext,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(
+                                    width: 1,
+                                    color: ColorsCollection.GreyNeutral02,
+                                  ),
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    color: ColorsCollection.GreyNeutral02,
+                                  ),
+                                ),
+                                suffixIcon: SizedBox(
+                                  width: 100,
+                                  child: CustomButton(
+                                      buttonType: ButtonType.filled,
+                                      text: "Apply",
+                                      onPressed: () {}),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Point Tersedia: 0',
+                          style: AppTextStyles.subtitleStyle,
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          'Payment Details',
+                          style: AppTextStyles.titleProduct,
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Price', style: AppTextStyles.subtitleStyle),
+                            Text('Rp. $totalPrice',
+                                style: AppTextStyles.subtitleStyle),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Discount',
+                                style: AppTextStyles.subtitleStyle),
+                            Text('Rp 0', style: AppTextStyles.subtitleStyle),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Tax', style: AppTextStyles.subtitleStyle),
+                            Text('Rp. 28.600',
+                                style: AppTextStyles.subtitleStyle),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
                       ],
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Discount', style: AppTextStyles.subtitleStyle),
-                        Text('Rp 0', style: AppTextStyles.subtitleStyle),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Tax', style: AppTextStyles.subtitleStyle),
-                        Text('Rp. 28.600', style: AppTextStyles.subtitleStyle),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                  ],
+                    );
+                  },
                 ),
               ),
             );
@@ -800,7 +880,7 @@ class _CartItemsState extends State<CartItems> {
                                                             MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        const CartItems()),
+                                                                        const CartDetail()),
                                                           );
                                                         },
                                                         buttonType:

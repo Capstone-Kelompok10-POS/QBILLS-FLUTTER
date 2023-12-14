@@ -106,7 +106,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const CartItems()),
+                                    builder: (context) => const CartDetail()),
                               );
                             },
                             icon: const Icon(
@@ -367,7 +367,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const CartItems()),
+                                builder: (context) => const CartDetail()),
                           );
                         },
                         buttonType: ButtonType.withIcon,

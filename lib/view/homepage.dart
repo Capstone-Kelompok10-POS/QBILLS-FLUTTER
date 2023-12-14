@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const CartItems()),
+                                                  const CartDetail()),
                                         );
                                       },
                                       icon: const Icon(

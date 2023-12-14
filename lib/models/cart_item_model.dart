@@ -3,7 +3,7 @@ class CartItem {
   final String name;
   final String image;
   final String nameSize;
-  final int amount;
+  late int amount;
   final int price;
 
   CartItem({
