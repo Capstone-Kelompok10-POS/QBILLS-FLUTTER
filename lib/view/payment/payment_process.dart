@@ -41,7 +41,8 @@ class _PaymentProcessState extends State<PaymentProcess> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
                     );
                   },
                   buttonType: ButtonType.filled,
@@ -49,6 +50,9 @@ class _PaymentProcessState extends State<PaymentProcess> {
               ),
               const SizedBox(height: 8),
               InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
                 child:
                     Text('Cancel payment', style: AppTextStyles.errorsubtitle),
               ),

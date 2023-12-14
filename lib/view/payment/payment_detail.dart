@@ -5,7 +5,7 @@ import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textfield/textfield.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
-import 'package:pos_capstone/view/authentication/loginpage.dart';
+import 'package:pos_capstone/view/payment/receipt-success.dart';
 
 class DetailCashPayment extends StatefulWidget {
   const DetailCashPayment({super.key});
@@ -120,17 +120,20 @@ class _DetailCashPaymentState extends State<DetailCashPayment> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginPage()),
+                                  builder: (context) => const ReceiptSuccess()),
                             );
                           },
                           buttonType: ButtonType.filled,
                         ),
                         const SizedBox(height: 16),
                         InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
                           child: Text('Cancel payment',
                               style: AppTextStyles.errorsubtitle),
                         ),
-                        const SizedBox(height: 20)
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),

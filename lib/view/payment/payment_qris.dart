@@ -117,13 +117,16 @@ class _PaymentQrisState extends State<PaymentQris> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginPage()),
+                                  builder: (context) => const LoginPage()),
                             );
                           },
                           buttonType: ButtonType.filled,
                         ),
                         const SizedBox(height: 16),
                         InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
                           child: Text('Cancel payment',
                               style: AppTextStyles.errorsubtitle),
                         ),
