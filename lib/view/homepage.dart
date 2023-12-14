@@ -8,6 +8,7 @@ import 'package:pos_capstone/view/authentication/loginpage.dart';
 import 'package:pos_capstone/view/cart/cartitem.dart';
 import 'package:pos_capstone/view/chip/model.dart';
 import 'package:pos_capstone/view/dashboard.dart';
+import 'package:pos_capstone/view/generatereportAi/generate_report.dart';
 import 'package:pos_capstone/view/membership/membership_list.dart';
 import 'package:pos_capstone/view/productsuggestion/product_suggestion.dart';
 import 'package:pos_capstone/view/reportpage/report.dart';
@@ -257,7 +258,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 40, right: 20, left: 20),
+                  padding: const EdgeInsets.only(top: 10, right: 20, left: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -405,7 +406,28 @@ class _HomePageState extends State<HomePage> {
                                     style: AppTextStyles.goodMorning),
                               ),
                             ),
-                            const SizedBox(height: 50),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ReportScreen(),
+                                    ));
+                              },
+                              child: ListTile(
+                                dense: true,
+                                minLeadingWidth: 12,
+                                leading: const SizedBox(
+                                    width: 26,
+                                    height: 26,
+                                    child: Icon(
+                                      Icons.file_copy_outlined,
+                                      color: ColorsCollection.PrimaryColor,
+                                    )),
+                                title: Text('Generate Report',
+                                    style: AppTextStyles.goodMorning),
+                              ),
+                            ),
                             InkWell(
                               onTap: () {
                                 loginViewmodel.logindata

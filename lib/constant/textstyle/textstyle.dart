@@ -113,4 +113,12 @@ class AppTextStyles {
       fontSize: 14,
       fontWeight: FontWeight.w400,
       color: ColorsCollection.WhiteNeutral);
+  static TextStyle messageChatbotBlack = GoogleFonts.openSans(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: ColorsCollection.BlackNeutral);
+  static TextStyle bottomButton = GoogleFonts.openSans(
+      fontSize: 15,
+      fontWeight: FontWeight.w600,
+      color: ColorsCollection.WhiteNeutral);
 }
