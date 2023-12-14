@@ -27,13 +27,28 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     productProvider = Provider.of(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      productProvider.getProducts();
+    });
     return SingleChildScrollView(
         child: Consumer<ProductProvider>(builder: (context, provider, child) {
       if (provider.isLoading) {
         return const Center(
-          child: CircularProgressIndicator(),
+          child:
+              CircularProgressIndicator(color: ColorsCollection.PrimaryColor),
         );
       } else {
+        if (provider.isSearching && provider.filteredResults.isEmpty) {
+          return const Center(
+            child: Text("Data tidak ditemukan"),
+          );
+        } else if (!provider.isSearching &&
+            provider.productModel?.results.isEmpty == true) {
+          return Center(
+            child: Text("Data tidak ditemukan",
+                style: AppTextStyles.hintTextSearch),
+          );
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -65,20 +80,17 @@ class _DashboardPageState extends State<DashboardPage> {
                     itemBuilder: (_, index) {
                       Result productDetail =
                           provider.productModel!.results[index];
+
                       if (provider.isSearching) {
                         if (index < provider.filteredResults.length) {
                           productDetail = provider.filteredResults[index];
                         } else {
-                          // Handle case when index is out of range
-                          // (You can return an empty widget or handle it based on your use case)
                           return Container();
                         }
                       } else {
                         if (index < provider.productModel!.results.length) {
                           productDetail = provider.productModel!.results[index];
                         } else {
-                          // Handle case when index is out of range
-                          // (You can return an empty widget or handle it based on your use case)
                           return Container();
                         }
                       }

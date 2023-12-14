@@ -90,6 +90,17 @@ class _MembershipListPageState extends State<MembershipListPage> {
                 color: ColorsCollection.PrimaryColor,
               ));
             } else {
+              if (provider.isSearching && provider.filteredResults.isEmpty) {
+                return const Center(
+                  child: Text("Data tidak ditemukan"),
+                );
+              } else if (!provider.isSearching &&
+                  provider.membershipModel?.results.isEmpty == true) {
+                return Center(
+                  child: Text("Data tidak ditemukan",
+                      style: AppTextStyles.hintTextSearch),
+                );
+              }
               return ListView.builder(
                 itemCount: provider.membershipModel!.results.length,
                 itemBuilder: (_, index) {
@@ -99,7 +110,7 @@ class _MembershipListPageState extends State<MembershipListPage> {
                       result = provider.filteredResults[index];
                     } else {
                       // Handle case when index is out of range
-                      // (You can return an empty widget or handle it based on your use case)
+
                       return Container();
                     }
                   } else {
@@ -107,7 +118,7 @@ class _MembershipListPageState extends State<MembershipListPage> {
                       result = provider.membershipModel!.results[index];
                     } else {
                       // Handle case when index is out of range
-                      // (You can return an empty widget or handle it based on your use case)
+
                       return Container();
                     }
                   }

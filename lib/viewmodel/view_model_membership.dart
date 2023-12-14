@@ -18,17 +18,21 @@ class MembershipProvider with ChangeNotifier {
       isLoading = true;
       notifyListeners(); // Pembaruan status loading diinisiasi
       membershipModel = await services.getMembers();
+      print(membershipModel!.results.length);
+      print("Ini controller model member");
     } catch (e) {
       if (e is DioError) {
         print('DioError: ${e.response?.statusCode}');
       }
     } finally {
       isLoading = false;
+      _isSearching = false;
       notifyListeners(); // Pembaruan status loading selesai, termasuk jika ada kesalahan
     }
   }
 
   void searchMembers(String query, List<Result> allMembers) {
+    _filteredResults.clear();
     if (query.isNotEmpty) {
       _filteredResults = allMembers
           .where((result) =>
