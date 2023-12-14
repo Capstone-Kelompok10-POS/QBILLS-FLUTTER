@@ -62,20 +62,58 @@ class LoginVM with ChangeNotifier {
   Future<void> buttonLogin(context) async {
     print("ini adalah button login");
     if (formkeylogin.currentState!.validate()) {
+      if (username.text.isEmpty || password.text.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Gagal Login'),
+              content: const Text('Mohon isi semua kolom.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Tutup'),
+                ),
+              ],
+            );
+          },
+        );
+      }
       final data = await service.loginAccount(username.text, password.text);
       dataLogin = data;
-      usernameSharedPreference = dataLogin!.results.username;
-      accessTokenSharedPreference = dataLogin!.results.token;
-      print("ini adalah fungsi login");
-      print(usernameSharedPreference);
-      print(accessTokenSharedPreference);
-      logindata.setString("username", usernameSharedPreference);
-      logindata.setString("access_token", accessTokenSharedPreference);
-      logindata.setBool('loginCurrent', false);
       if (data != null) {
+        usernameSharedPreference = dataLogin!.results.username;
+        accessTokenSharedPreference = dataLogin!.results.token;
+        print("ini adalah fungsi login");
+        print(usernameSharedPreference);
+        print(accessTokenSharedPreference);
+        logindata.setString("username", usernameSharedPreference);
+        logindata.setString("access_token", accessTokenSharedPreference);
+        logindata.setBool('loginCurrent', false);
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const HomePage()),
-            (route) => false);
+          MaterialPageRoute(builder: (context) => const HomePage()),
+          (route) => false,
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Gagal Login'),
+              content: const Text('Username atau password salah.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Tutup'),
+                ),
+              ],
+            );
+          },
+        );
       }
     }
   }

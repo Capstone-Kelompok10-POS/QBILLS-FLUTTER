@@ -24,7 +24,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
   late LoginVM loginViewmodel;
 
   final screen = [
@@ -128,27 +127,32 @@ class _HomePageState extends State<HomePage> {
                                     ])
                               ]),
                             ),
-                            Badge(
-                              alignment: Alignment.topRight,
-                              label: const Text("2"),
-                              smallSize: 10,
-                              child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(
-                                    minWidth: 24,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const CartItems()),
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.shopping_cart_outlined,
-                                    color: ColorsCollection.BlackNeutral,
-                                  )),
+                            Consumer<ProductProvider>(
+                              builder: (context, value, child) {
+                                return Badge(
+                                  alignment: Alignment.topRight,
+                                  label:
+                                      Text(value.cartItems.length.toString()),
+                                  smallSize: 10,
+                                  child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(
+                                        minWidth: 24,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const CartItems()),
+                                        );
+                                      },
+                                      icon: const Icon(
+                                        Icons.shopping_cart_outlined,
+                                        color: ColorsCollection.BlackNeutral,
+                                      )),
+                                );
+                              },
                             )
                           ],
                         ),
