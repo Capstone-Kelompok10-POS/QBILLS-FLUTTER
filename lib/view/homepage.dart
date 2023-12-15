@@ -8,7 +8,7 @@ import 'package:pos_capstone/view/authentication/loginpage.dart';
 import 'package:pos_capstone/view/cart/cartitem.dart';
 import 'package:pos_capstone/view/chip/model.dart';
 import 'package:pos_capstone/view/dashboard.dart';
-import 'package:pos_capstone/view/detailproduct/product_suggestion.dart';
+import 'package:pos_capstone/view/productsuggestion/product_suggestion.dart';
 import 'package:pos_capstone/view/generatereportAi/generate_report.dart';
 import 'package:pos_capstone/view/membership/membership_list.dart';
 import 'package:pos_capstone/view/reportpage/report.dart';
