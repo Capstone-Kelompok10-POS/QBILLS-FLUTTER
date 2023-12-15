@@ -31,15 +31,25 @@ class ChatbotProvider with ChangeNotifier {
       _isAdding = true;
       notifyListeners();
 
-      // Pastikan _chatbotResponse diinisialisasi dengan instance RecomendationAi
+      // Tambahkan pesan dari pengguna ke daftar terlebih dahulu
+      _messages.add(ChatMessage(text: userMessage, isUser: true));
+      notifyListeners();
+
+      // Kemudian, kirim pesan dari pengguna ke chatbot
       _chatbotResponse = await _chatbotService.addUserMessage(
         userMessage,
         _messages,
       );
 
+      // Tambahkan tanggapan dari chatbot ke daftar
+      if (_chatbotResponse != null) {
+        _messages
+            .add(ChatMessage(text: _chatbotResponse!.message, isUser: false));
+      }
+
       notifyListeners();
     } catch (error) {
-      // ... (kode penanganan kesalahan yang sudah ada)
+      // ... (kode penanganan kesalahan)
     } finally {
       _isAdding = false;
       notifyListeners();

@@ -38,12 +38,12 @@ class ApiServiceProduct {
 
       print('Response: ${response.data}');
       final chatbotResponse = RecomendationAi.fromJson(response.data);
+
       print(chatbotResponse.results.reply);
       messages.add(ChatMessage(
         text: chatbotResponse.results.reply,
         isUser: false,
       ));
-      messages.add(ChatMessage(text: userMessage, isUser: true));
 
       return RecomendationAi.fromJson(response.data);
     } catch (error) {

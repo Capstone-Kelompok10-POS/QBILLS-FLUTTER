@@ -32,7 +32,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
               children: [
                 Expanded(
                   child: ListView.builder(
-                    reverse: true,
                     itemCount: chatbotProvider.messages.length,
                     itemBuilder: (context, index) {
                       final message = chatbotProvider.messages[index];
@@ -44,13 +43,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              CircleAvatar(
-                                backgroundColor: ColorsCollection.PrimaryColor,
-                                child: Text(
-                                  'U',
-                                  style: AppTextStyles.titleStyleWhite,
-                                ),
-                              ),
                               Flexible(
                                 child: Container(
                                   margin: const EdgeInsets.all(8.0),
@@ -62,6 +54,13 @@ class _ChatbotPageState extends State<ChatbotPage> {
                                   child: Text(
                                     message.text,
                                   ),
+                                ),
+                              ),
+                              CircleAvatar(
+                                backgroundColor: ColorsCollection.PrimaryColor,
+                                child: Text(
+                                  'U',
+                                  style: AppTextStyles.titleStyleWhite,
                                 ),
                               ),
                             ],

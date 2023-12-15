@@ -25,6 +25,8 @@ class RecomendationAi {
         results: Results.fromJson(json["results"]),
       );
 
+  get message => null;
+
   Map<String, dynamic> toJson() => {
         "meta": meta.toJson(),
         "results": results.toJson(),
