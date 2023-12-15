@@ -64,7 +64,7 @@ class _CartDetailState extends State<CartDetail> {
           if (value.cartItems.isEmpty) {
             return const Center(
               child: Text(
-                'Keranjang kosong',
+                'Tidak Ada Produk',
                 style: TextStyle(fontSize: 18),
               ),
             );

@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pos_capstone/models/recomendation_suggest_models.dart';
 import 'package:pos_capstone/service/suggestion_service.dart';
-import 'package:pos_capstone/view/productsuggestion/product_suggestion.dart';
 import 'package:pos_capstone/viewmodel/chat_message.dart';
 
 class ChatbotProvider with ChangeNotifier {

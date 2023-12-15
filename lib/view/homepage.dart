@@ -8,9 +8,9 @@ import 'package:pos_capstone/view/authentication/loginpage.dart';
 import 'package:pos_capstone/view/cart/cartitem.dart';
 import 'package:pos_capstone/view/chip/model.dart';
 import 'package:pos_capstone/view/dashboard.dart';
+import 'package:pos_capstone/view/detailproduct/product_suggestion.dart';
 import 'package:pos_capstone/view/generatereportAi/generate_report.dart';
 import 'package:pos_capstone/view/membership/membership_list.dart';
-import 'package:pos_capstone/view/productsuggestion/product_suggestion.dart';
 import 'package:pos_capstone/view/reportpage/report.dart';
 import 'package:pos_capstone/viewmodel/view_model_login.dart';
 import 'package:pos_capstone/viewmodel/view_model_product.dart';
@@ -44,21 +44,6 @@ class _HomePageState extends State<HomePage> {
   var idSelected = 1;
 
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
-  // @override
-  // void initState() {
-  //   productProvider = Provider.of<ProductProvider>(context, listen: false);
-  //   loginViewmodel = Provider.of<LoginVM>(context, listen: false);
-  //   productProvider.getProducts();
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return const GuideDialog();
-  //       },
-  //     );
-  //   });
-  // }
 
   @override
   void initState() {
@@ -130,29 +115,52 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Consumer<ProductProvider>(
                               builder: (context, value, child) {
-                                return Badge(
-                                  alignment: Alignment.topRight,
-                                  label:
-                                      Text(value.cartItems.length.toString()),
-                                  smallSize: 10,
-                                  child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints: const BoxConstraints(
-                                        minWidth: 24,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
+                                return value.cartItems.isEmpty
+                                    ? IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(
+                                          minWidth: 24,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
                                               builder: (context) =>
-                                                  const CartDetail()),
-                                        );
-                                      },
-                                      icon: const Icon(
-                                        Icons.shopping_cart_outlined,
-                                        color: ColorsCollection.BlackNeutral,
-                                      )),
-                                );
+                                                  const CartDetail(),
+                                            ),
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.shopping_cart_outlined,
+                                          color: ColorsCollection.BlackNeutral,
+                                        ),
+                                      ) // Jika keranjang belanja kosong, tidak menampilkan apa pun
+                                    : Badge(
+                                        alignment: Alignment.topRight,
+                                        label: Text(
+                                            value.cartItems.length.toString()),
+                                        smallSize: 10,
+                                        child: IconButton(
+                                          padding: EdgeInsets.zero,
+                                          constraints: const BoxConstraints(
+                                            minWidth: 24,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const CartDetail(),
+                                              ),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.shopping_cart_outlined,
+                                            color:
+                                                ColorsCollection.BlackNeutral,
+                                          ),
+                                        ),
+                                      );
                               },
                             )
                           ],

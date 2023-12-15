@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
-import 'package:pos_capstone/models/login_model.dart';
+
 import 'package:pos_capstone/models/product_model.dart';
-import 'package:pos_capstone/service/product_service.dart';
+
 import 'package:pos_capstone/view/detailproduct/productdetail.dart';
 import 'package:pos_capstone/viewmodel/view_model_product.dart';
 import 'package:provider/provider.dart';

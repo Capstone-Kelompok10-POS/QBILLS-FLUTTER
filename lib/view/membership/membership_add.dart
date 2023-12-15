@@ -3,7 +3,7 @@ import 'package:pos_capstone/constant/button/button_collection.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/textfield/textfield.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
-import 'package:pos_capstone/view/membership/membership_list.dart';
+
 import 'package:pos_capstone/viewmodel/view_model_add_membership.dart';
 
 class MembershipScreen extends StatelessWidget {

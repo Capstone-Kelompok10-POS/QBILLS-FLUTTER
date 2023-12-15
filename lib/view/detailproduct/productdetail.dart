@@ -50,7 +50,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     data = widget.data;
     datadetail = widget.data.productDetail;
     for (int i = 0; i < datadetail.length; i++) {
-      listSize.add(CoffeeSize(i, "images/cup.png", datadetail[i].size, "-"));
+      listSize
+          .add(CoffeeSize(i, "images/cup.png", datadetail[i].size, "normal"));
     }
     setState(() {});
     totalPrice = data.productDetail[0].price * quantity.toDouble();
@@ -94,26 +95,48 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   Consumer<ProductProvider>(
                     builder: (context, value, child) {
-                      return Badge(
-                        alignment: Alignment.topRight,
-                        label: Text(value.cartItems.length.toString()),
-                        smallSize: 10,
-                        child: IconButton(
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(
-                                minWidth: 24, minHeight: 24),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const CartDetail()),
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.shopping_cart_outlined,
-                              color: ColorsCollection.BlackNeutral,
-                            )),
-                      );
+                      return value.cartItems.isEmpty
+                          ? IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(
+                                minWidth: 24,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const CartDetail(),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.shopping_cart_outlined,
+                                color: ColorsCollection.BlackNeutral,
+                              ),
+                            ) // Jika keranjang belanja kosong, tidak menampilkan apa pun
+                          : Badge(
+                              alignment: Alignment.topRight,
+                              label: Text(value.cartItems.length.toString()),
+                              smallSize: 10,
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(
+                                  minWidth: 24,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const CartDetail(),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.shopping_cart_outlined,
+                                  color: ColorsCollection.BlackNeutral,
+                                ),
+                              ),
+                            );
                     },
                   )
                 ],
