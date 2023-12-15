@@ -1,45 +1,54 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:pos_capstone/models/recomendation_suggest_models.dart';
 import 'package:pos_capstone/service/suggestion_service.dart';
 import 'package:pos_capstone/view/productsuggestion/product_suggestion.dart';
+import 'package:pos_capstone/viewmodel/chat_message.dart';
 
 class ChatbotProvider with ChangeNotifier {
-  final List<ChatMessage> _messages = [];
   final TextEditingController _messageController = TextEditingController();
-  bool _isLoading = false;
+  bool _isAdding = false;
   bool _isSending = false;
+  String accestoken = '';
   bool get isSending => _isSending;
-
+  bool get isAdding => _isAdding;
+  RecomendationAi? _chatbotResponse; // Ubah tipe data ke RecomendationAi
+  RecomendationAi? get chatbotResponse => _chatbotResponse;
+  List<ChatMessage> _messages = [];
   List<ChatMessage> get messages => _messages;
-  bool get isLoading => _isLoading;
+
+  final ApiServiceProduct _chatbotService = ApiServiceProduct();
 
   void sendMessage(String message) {
     if (message.isNotEmpty) {
-      _messages.insert(0, ChatMessage(text: message, isUser: true));
       _messageController.clear();
-      _simulateBotResponse();
     }
+
+    notifyListeners(); // Pemanggilan ini setelah mengirim pesan ke penyedia pesan
   }
 
-  Future<void> _simulateBotResponse() async {
+  Future<void> addUserResponse(String userMessage) async {
     try {
-      _setLoading(true);
-      final apiService = ApiServiceProduct();
-      final productModel = await apiService.getRecomendation();
-      _sendMessage('Rekomendasi produk: ${productModel.results}');
+      _isAdding = true;
+      notifyListeners();
+
+      // Pastikan _chatbotResponse diinisialisasi dengan instance RecomendationAi
+      _chatbotResponse = await _chatbotService.addUserMessage(
+        userMessage,
+        _messages,
+      );
+
+      notifyListeners();
     } catch (error) {
-      _sendMessage('Maaf, terjadi kesalahan dalam mengambil data produk.');
+      // ... (kode penanganan kesalahan yang sudah ada)
     } finally {
-      _setLoading(false);
+      _isAdding = false;
+      notifyListeners();
     }
   }
 
-  void _sendMessage(String text) {
-    _messages.insert(0, ChatMessage(text: text, isUser: false));
-    notifyListeners();
-  }
-
-  void _setLoading(bool value) {
-    _isLoading = value;
+  void _setChatbotResponse(RecomendationAi? value) {
+    _chatbotResponse = value;
     notifyListeners();
   }
 

@@ -1,18 +1,7 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
-import 'package:pos_capstone/constant/padding/padding_collection.dart';
+import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/viewmodel/view_model_chatbot.dart';
 import 'package:provider/provider.dart';
-import 'package:pos_capstone/constant/colors/colors.dart';
-import 'package:pos_capstone/constant/textstyle/textstyle.dart';
-
-class ChatMessage {
-  final String text;
-  final bool isUser;
-
-  ChatMessage({required this.text, required this.isUser});
-}
 
 class ChatbotPage extends StatefulWidget {
   const ChatbotPage({Key? key}) : super(key: key);
@@ -32,15 +21,12 @@ class _ChatbotPageState extends State<ChatbotPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Chat with QuickBills',
-          style: AppTextStyles.appBarChatbot,
-        ),
+        title: Text('Chat with QuickBills'),
         backgroundColor: ColorsCollection.PrimaryColor,
         centerTitle: true,
       ),
-      body: ChangeNotifierProvider(
-        create: (context) => ChatbotProvider(),
+      body: ChangeNotifierProvider.value(
+        value: ChatbotProvider(),
         child: Consumer<ChatbotProvider>(
           builder: (context, chatbotProvider, _) {
             return Column(
@@ -60,11 +46,8 @@ class _ChatbotPageState extends State<ChatbotPage> {
                           children: [
                             if (!message.isUser)
                               CircleAvatar(
-                                backgroundColor: ColorsCollection.GreyNeutral,
-                                child: Text(
-                                  'B',
-                                  style: AppTextStyles.appBarChatbot,
-                                ),
+                                backgroundColor: Colors.grey,
+                                child: Text('B'),
                               ),
                             Expanded(
                               child: Container(
@@ -73,24 +56,18 @@ class _ChatbotPageState extends State<ChatbotPage> {
                                 decoration: BoxDecoration(
                                   color: message.isUser
                                       ? ColorsCollection.PrimaryColor
-                                      : ColorsCollection.GreyNeutral,
+                                      : Colors.grey,
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
                                 child: Text(
                                   message.text,
-                                  style: AppTextStyles.messageChatbot,
                                 ),
                               ),
                             ),
                             if (message.isUser)
                               CircleAvatar(
-                                // Ganti dengan foto profil chatbot jika ada
                                 backgroundColor: ColorsCollection.PrimaryColor,
-                                // Ganti dengan foto profil chatbot jika ada
-                                child: Text(
-                                  'U',
-                                  style: AppTextStyles.appBarChatbot,
-                                ),
+                                child: Text('U'),
                               ),
                           ],
                         ),
@@ -106,16 +83,16 @@ class _ChatbotPageState extends State<ChatbotPage> {
                       Expanded(
                         child: TextField(
                           controller: _messageController,
+                          onSubmitted: (message) {
+                            chatbotProvider.sendMessage(message);
+                          },
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Type a message...',
-                            hintStyle: AppTextStyles.hintText,
                           ),
                         ),
                       ),
                       IconButton(
-                        constraints:
-                            const BoxConstraints(minWidth: 24, minHeight: 24),
                         icon: Icon(
                           Icons.send,
                           color: chatbotProvider.isSending
@@ -123,14 +100,25 @@ class _ChatbotPageState extends State<ChatbotPage> {
                               : null,
                         ),
                         onPressed: () async {
-                          _sendMessage(
-                              chatbotProvider, _messageController.text);
+                          final userMessage = _messageController.text;
+                          chatbotProvider.sendMessage(userMessage);
                           _messageController.clear();
+
+                          // Tambahkan pesan dari user ke daftar pesan
+                          chatbotProvider.addUserResponse(userMessage);
                         },
                       ),
                     ],
                   ),
                 ),
+                // Menampilkan hasil respons dari chatbot
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Text(
+                //     chatbotProvider.chatbotResponse.toString(),
+                //     style: TextStyle(fontSize: 16),
+                //   ),
+                // ),
               ],
             );
           },

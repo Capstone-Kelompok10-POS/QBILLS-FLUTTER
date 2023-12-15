@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:pos_capstone/models/memberphone_model.dart';
 import 'package:pos_capstone/models/membership_model.dart';
+import 'package:pos_capstone/models/pointmember_model.dart';
 import 'package:pos_capstone/utils/Api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,6 +36,58 @@ class ApiServiceMembership {
     }
   }
 
+  Future<MembershipPhoneNumber> getMembershipByPhoneNumbers(
+      String phoneNumber) async {
+    try {
+      await setToken();
+      print(token);
+
+      dio.options.headers['Authorization'] = 'Bearer $token';
+
+      final response = await dio.get(
+          Url.BaseUrl + Url.MembershipPhoneNumberUrl + '$phoneNumber',
+          options: Options(headers: head));
+
+      print(response.data);
+      return MembershipPhoneNumber.fromJson(response.data);
+    } catch (_) {
+      print(_);
+      rethrow;
+    }
+  }
+
+  Future<List<Results>> searchMembersByPhone(String query) async {
+    try {
+      await setToken();
+      print(token);
+
+      dio.options.headers['Authorization'] = 'Bearer $token';
+
+      final response = await dio.get(
+        Url.BaseUrl + Url.MembershipUrl,
+        options: Options(headers: head),
+      );
+
+      final membershipData = MembershipPhoneNumber.fromJson(response.data);
+      final List<Results> allMembers = [membershipData.results];
+
+      if (query.isNotEmpty) {
+        // Filter hasil berdasarkan nomor telepon
+        final List<Results> filteredResults = allMembers
+            .where((result) =>
+                result.phoneNumber.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+        return filteredResults;
+      } else {
+        // Jika query kosong, kembalikan semua anggota
+        return allMembers;
+      }
+    } catch (_) {
+      print(_);
+      rethrow;
+    }
+  }
+
   Future<void> addMembership(String name, String phone) async {
     try {
       await setToken();
@@ -56,6 +110,24 @@ class ApiServiceMembership {
       }
     } catch (error) {
       print('Error: $error');
+    }
+  }
+
+  Future<PointModelMember> getPointConvertMember() async {
+    try {
+      await setToken();
+      print(token);
+
+      dio.options.headers['Authorization'] = 'Bearer $token';
+
+      final response = await dio.get(Url.BaseUrl + Url.PointMemberUrl,
+          options: Options(headers: head));
+
+      print(response.data);
+      return PointModelMember.fromJson(response.data);
+    } catch (_) {
+      print(_);
+      rethrow;
     }
   }
 }

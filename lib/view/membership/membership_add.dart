@@ -67,12 +67,6 @@ class MembershipScreen extends StatelessWidget {
                         membershipService.addMembershipp(
                           nameController.text,
                           phoneController.text,
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => MembershipListPage(),
-                          //   ),
-                          // ),
                         );
                         Navigator.pop(context);
                       }

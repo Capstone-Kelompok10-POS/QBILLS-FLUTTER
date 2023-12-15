@@ -12,7 +12,7 @@ String recomendationAiToJson(RecomendationAi data) =>
 
 class RecomendationAi {
   Meta meta;
-  String results;
+  Results results;
 
   RecomendationAi({
     required this.meta,
@@ -22,12 +22,12 @@ class RecomendationAi {
   factory RecomendationAi.fromJson(Map<String, dynamic> json) =>
       RecomendationAi(
         meta: Meta.fromJson(json["meta"]),
-        results: json["results"],
+        results: Results.fromJson(json["results"]),
       );
 
   Map<String, dynamic> toJson() => {
         "meta": meta.toJson(),
-        "results": results,
+        "results": results.toJson(),
       };
 }
 
@@ -48,5 +48,21 @@ class Meta {
   Map<String, dynamic> toJson() => {
         "success": success,
         "message": message,
+      };
+}
+
+class Results {
+  String reply;
+
+  Results({
+    required this.reply,
+  });
+
+  factory Results.fromJson(Map<String, dynamic> json) => Results(
+        reply: json["reply"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "reply": reply,
       };
 }

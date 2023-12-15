@@ -7,4 +7,7 @@ class Url {
   static const String MembershipUrl = "/api/v1/memberships";
   static const String AddMembershipUrl = "/api/v1/membership/register";
   static const String SuggestionProductAIUrl = "/api/v1/product/recommendation";
+  static const String MembershipPhoneNumberUrl =
+      "/api/v1/membership/phone-number/";
+  static const String PointMemberUrl = "/api/v1/convert/points";
 }

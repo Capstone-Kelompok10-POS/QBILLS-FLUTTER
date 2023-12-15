@@ -4,9 +4,11 @@ import 'package:pos_capstone/constant/button/button_collection.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
+import 'package:pos_capstone/service/membership_service.dart';
 import 'package:pos_capstone/view/payment/payment_detail.dart';
 import 'package:pos_capstone/view/payment/payment_process.dart';
 import 'package:pos_capstone/view/payment/payment_qris.dart';
+import 'package:pos_capstone/viewmodel/view_model_membership.dart';
 import 'package:pos_capstone/viewmodel/view_model_product.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +25,8 @@ class _CartDetailState extends State<CartDetail> {
   late int amount = 1;
   double totalPrice = 0;
   late ProductProvider productProvider;
+  late MembershipProvider membershipProvider;
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   double _calculateBottomSheetHeight() {
     double baseHeight = 400;
@@ -33,6 +37,8 @@ class _CartDetailState extends State<CartDetail> {
 
   @override
   Widget build(BuildContext context) {
+    membershipProvider =
+        Provider.of<MembershipProvider>(context, listen: false);
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: ColorsCollection.WhiteNeutral,
@@ -81,6 +87,8 @@ class _CartDetailState extends State<CartDetail> {
                         SizedBox(
                           height: 40,
                           child: TextField(
+                            controller: _phoneNumberController,
+                            onChanged: (query) {},
                             decoration: InputDecoration(
                                 contentPadding:
                                     const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -104,7 +112,15 @@ class _CartDetailState extends State<CartDetail> {
                                   child: CustomButton(
                                       buttonType: ButtonType.filled,
                                       text: "Search",
-                                      onPressed: () {}),
+                                      onPressed: () {
+                                        final phoneNumber =
+                                            _phoneNumberController.text;
+                                        if (phoneNumber.isNotEmpty) {
+                                          membershipProvider
+                                              .getMembersByPhoneNumber(
+                                                  phoneNumber);
+                                        }
+                                      }),
                                 )),
                           ),
                         ),
@@ -350,7 +366,7 @@ class _CartDetailState extends State<CartDetail> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'Point Tersedia: 0',
+                          'Point Tersedia: ${membershipProvider.totalPoint}',
                           style: AppTextStyles.subtitleStyle,
                         ),
                         const SizedBox(height: 24),
