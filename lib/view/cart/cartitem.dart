@@ -359,6 +359,17 @@ class _CartDetailState extends State<CartDetail> {
                               }).toList(),
                               onChanged: (int? newValue) {
                                 value.updateSelectedValue(newValue ?? 0);
+                                // Panggil getValuePoint dengan selectedValue dari dropdown
+                                newValue = value.selectedValue;
+                                int valuePoint =
+                                    pointProvider.getValuePoint(newValue);
+
+                                // Cetak hasilnya
+                                print('ValuePoint for $newValue: $valuePoint');
+
+                                setState(() {
+                                  valuePoint;
+                                });
                               },
                               decoration: InputDecoration(
                                 contentPadding:
@@ -393,32 +404,45 @@ class _CartDetailState extends State<CartDetail> {
                           style: AppTextStyles.titleProduct,
                         ),
                         const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Price', style: AppTextStyles.subtitleStyle),
-                            Text('Rp. $totalPrice',
-                                style: AppTextStyles.subtitleStyle),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Discount',
-                                style: AppTextStyles.subtitleStyle),
-                            Text('Rp 0', style: AppTextStyles.subtitleStyle),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Tax', style: AppTextStyles.subtitleStyle),
-                            Text('Rp. 28.600',
-                                style: AppTextStyles.subtitleStyle),
-                          ],
-                        ),
+                        Consumer<ViewModelConvertPointMember>(
+                            builder: (context, value, _) {
+                          int totalDiscount =
+                              value.getValuePoint(pointProvider.selectedValue);
+                          return Column(children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Price',
+                                    style: AppTextStyles.subtitleStyle),
+                                Text('Rp. $totalPrice',
+                                    style: AppTextStyles.subtitleStyle),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Consumer<ViewModelConvertPointMember>(
+                                builder: (context, value, _) {
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Discount',
+                                      style: AppTextStyles.subtitleStyle),
+                                  Text('Rp $totalDiscount',
+                                      style: AppTextStyles.subtitleStyle),
+                                ],
+                              );
+                            }),
+                            const SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Tax', style: AppTextStyles.subtitleStyle),
+                                Text('Rp. ${totalPrice * 0.10}',
+                                    style: AppTextStyles.subtitleStyle),
+                              ],
+                            ),
+                          ]);
+                        }),
                         const SizedBox(height: 20),
                       ],
                     );
@@ -455,23 +479,29 @@ class _CartDetailState extends State<CartDetail> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: SizedBox(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Total :",
-                                      style: AppTextStyles.subtitleStyleBlack,
-                                    ),
-                                    Text(
-                                      "Rp.26.000",
-                                      style: AppTextStyles.titleStyleBlack,
-                                    )
-                                  ],
+                            Consumer<ViewModelConvertPointMember>(
+                                builder: (context, value, _) {
+                              int totalDiscount = value
+                                  .getValuePoint(pointProvider.selectedValue);
+                              return Expanded(
+                                child: SizedBox(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Total :",
+                                        style: AppTextStyles.subtitleStyleBlack,
+                                      ),
+                                      Text(
+                                        "Rp. ${(totalPrice - totalDiscount) + (totalPrice * 0.10)}",
+                                        style: AppTextStyles.titleStyleBlack,
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            }),
                             Expanded(
                               child: CustomButton(
                                 text: "Order",

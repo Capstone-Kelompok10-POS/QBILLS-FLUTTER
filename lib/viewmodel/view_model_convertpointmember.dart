@@ -13,6 +13,18 @@ class ViewModelConvertPointMember with ChangeNotifier {
   int _selectedValue = 0;
   String accessToken = "";
   int get selectedValue => _selectedValue;
+  
+
+  int getValuePoint(int point) {
+    if (membershipPoint != null) {
+      for (var result in membershipPoint!.results) {
+        if (result.point == point) {
+          return result.valuePoint;
+        }
+      }
+    }
+    return 0; // Nilai default jika point tidak ditemukan
+  }
 
   Future<void> getConvertPointMembers() async {
     try {
@@ -23,6 +35,7 @@ class ViewModelConvertPointMember with ChangeNotifier {
         membershipPoint!.results.map<int>((result) => result.point),
       );
       _dropdownItems = uniquePoints.toList()..sort();
+      
       print(_dropdownItems.length);
       print(_dropdownItems);
     } catch (e) {
