@@ -313,7 +313,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             InkWell(
                               onTap: () =>
-                                  productProvider.indexPage1(context, 0),
+                                  productProvider.indexPage1(context, 2),
                               child: ListTile(
                                 dense: true,
                                 minLeadingWidth: 12,

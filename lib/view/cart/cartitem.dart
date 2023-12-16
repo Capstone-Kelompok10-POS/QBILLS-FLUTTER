@@ -1,13 +1,15 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pos_capstone/constant/button/button_collection.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
-import 'package:pos_capstone/service/membership_service.dart';
 import 'package:pos_capstone/view/payment/payment_detail.dart';
 import 'package:pos_capstone/view/payment/payment_process.dart';
 import 'package:pos_capstone/view/payment/payment_qris.dart';
+import 'package:pos_capstone/viewmodel/view_model_convertpointmember.dart';
 import 'package:pos_capstone/viewmodel/view_model_membership.dart';
 import 'package:pos_capstone/viewmodel/view_model_product.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +29,7 @@ class _CartDetailState extends State<CartDetail> {
   late ProductProvider productProvider;
   late MembershipProvider membershipProvider;
   final TextEditingController _phoneNumberController = TextEditingController();
+  late ViewModelConvertPointMember pointProvider;
 
   double _calculateBottomSheetHeight() {
     double baseHeight = 400;
@@ -37,6 +40,9 @@ class _CartDetailState extends State<CartDetail> {
 
   @override
   Widget build(BuildContext context) {
+    pointProvider =
+        Provider.of<ViewModelConvertPointMember>(context, listen: false);
+    pointProvider.getConvertPointMembers();
     membershipProvider =
         Provider.of<MembershipProvider>(context, listen: false);
     return Scaffold(
@@ -107,20 +113,24 @@ class _CartDetailState extends State<CartDetail> {
                                     color: ColorsCollection.GreyNeutral02,
                                   ),
                                 ),
-                                suffixIcon: SizedBox(
-                                  width: 100,
-                                  child: CustomButton(
-                                      buttonType: ButtonType.filled,
-                                      text: "Search",
-                                      onPressed: () {
-                                        final phoneNumber =
-                                            _phoneNumberController.text;
-                                        if (phoneNumber.isNotEmpty) {
-                                          membershipProvider
-                                              .getMembersByPhoneNumber(
-                                                  phoneNumber);
-                                        }
-                                      }),
+                                suffixIcon: Consumer(
+                                  builder: (context, value, child) {
+                                    return SizedBox(
+                                      width: 100,
+                                      child: CustomButton(
+                                          buttonType: ButtonType.filled,
+                                          text: "Search",
+                                          onPressed: () {
+                                            final phoneNumber =
+                                                _phoneNumberController.text;
+                                            if (phoneNumber.isNotEmpty) {
+                                              membershipProvider
+                                                  .getMembersByPhoneNumber(
+                                                      phoneNumber);
+                                            }
+                                          }),
+                                    );
+                                  },
                                 )),
                           ),
                         ),
@@ -334,10 +344,23 @@ class _CartDetailState extends State<CartDetail> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        SizedBox(
-                          height: 40,
-                          child: TextField(
-                            decoration: InputDecoration(
+                        Consumer<ViewModelConvertPointMember>(
+                          builder: (context, value, _) {
+                            return DropdownButtonFormField<int>(
+                              value: value.selectedValue != 0
+                                  ? value.selectedValue
+                                  : null,
+                              items: value.dropdownItems
+                                  .map<DropdownMenuItem<int>>((int value) {
+                                return DropdownMenuItem<int>(
+                                  value: value,
+                                  child: Text(value.toString()),
+                                );
+                              }).toList(),
+                              onChanged: (int? newValue) {
+                                value.updateSelectedValue(newValue ?? 0);
+                              },
+                              decoration: InputDecoration(
                                 contentPadding:
                                     const EdgeInsets.fromLTRB(10, 10, 10, 10),
                                 hintText: "Change Point",
@@ -355,14 +378,9 @@ class _CartDetailState extends State<CartDetail> {
                                     color: ColorsCollection.GreyNeutral02,
                                   ),
                                 ),
-                                suffixIcon: SizedBox(
-                                  width: 100,
-                                  child: CustomButton(
-                                      buttonType: ButtonType.filled,
-                                      text: "Apply",
-                                      onPressed: () {}),
-                                )),
-                          ),
+                              ),
+                            );
+                          },
                         ),
                         const SizedBox(height: 10),
                         Text(

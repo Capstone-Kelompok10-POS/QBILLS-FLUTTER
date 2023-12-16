@@ -66,6 +66,7 @@ class MembershipProvider with ChangeNotifier {
     } catch (e) {
       print('Error searching members: $e');
     }
+    notifyListeners();
   }
 
   void searchMembers(String query, List<Result> allMembers) {
@@ -76,6 +77,7 @@ class MembershipProvider with ChangeNotifier {
               result.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
       _isSearching = true;
+      notifyListeners();
     } else {
       _filteredResults.clear();
       _isSearching = false;

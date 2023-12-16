@@ -5,7 +5,6 @@ import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
 import 'package:pos_capstone/models/product_model.dart';
-
 import 'package:pos_capstone/view/cart/cartitem.dart';
 import 'package:pos_capstone/viewmodel/view_model_product.dart';
 import 'package:provider/provider.dart';
@@ -50,8 +49,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     data = widget.data;
     datadetail = widget.data.productDetail;
     for (int i = 0; i < datadetail.length; i++) {
-      listSize
-          .add(CoffeeSize(i, "images/cup.png", datadetail[i].size, "normal"));
+      listSize.add(CoffeeSize(i, "images/cup.png", datadetail[i].size, "_"));
     }
     setState(() {});
     totalPrice = data.productDetail[0].price * quantity.toDouble();
