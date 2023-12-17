@@ -6,6 +6,7 @@ import 'package:pos_capstone/viewmodel/view_model_chatbot.dart';
 import 'package:pos_capstone/viewmodel/view_model_convertpointmember.dart';
 import 'package:pos_capstone/viewmodel/view_model_login.dart';
 import 'package:pos_capstone/viewmodel/view_model_membership.dart';
+import 'package:pos_capstone/viewmodel/view_model_paymentmethod.dart';
 import 'package:pos_capstone/viewmodel/view_model_product.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MembershipViewModel()),
         ChangeNotifierProvider(create: (context) => ChatbotProvider()),
         ChangeNotifierProvider(
-            create: (context) => ViewModelConvertPointMember())
+            create: (context) => ViewModelConvertPointMember()),
+        ChangeNotifierProvider(create: (context) => ViewModelPaymentMethod()),
       ],
       child: MaterialApp(
         theme: ThemeData(

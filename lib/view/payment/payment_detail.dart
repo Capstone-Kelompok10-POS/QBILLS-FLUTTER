@@ -5,6 +5,7 @@ import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/padding/padding_collection.dart';
 import 'package:pos_capstone/constant/textfield/textfield.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
+import 'package:pos_capstone/view/payment/payment_process.dart';
 import 'package:pos_capstone/view/payment/receipt_success.dart';
 import 'package:provider/provider.dart';
 
@@ -143,7 +144,7 @@ class _DetailCashPaymentState extends State<DetailCashPayment> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const ReceiptSuccess()),
+                                              const PaymentProcess()),
                                     );
                                   },
                                   buttonType: ButtonType.filled,

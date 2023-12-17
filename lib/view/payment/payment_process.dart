@@ -175,10 +175,6 @@ class _PaymentProcessState extends State<PaymentProcess> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        SvgPicture.asset(
-                                          "images/bankbca.svg",
-                                          width: 20,
-                                        ),
                                         const SizedBox(height: 4),
                                         Text(
                                           "798 723 7797",

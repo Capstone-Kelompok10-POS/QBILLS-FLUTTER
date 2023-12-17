@@ -9,6 +9,7 @@ import 'package:pos_capstone/view/payment/payment_process.dart';
 import 'package:pos_capstone/view/payment/payment_qris.dart';
 import 'package:pos_capstone/viewmodel/view_model_convertpointmember.dart';
 import 'package:pos_capstone/viewmodel/view_model_membership.dart';
+import 'package:pos_capstone/viewmodel/view_model_paymentmethod.dart';
 import 'package:pos_capstone/viewmodel/view_model_product.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ class _CartDetailState extends State<CartDetail> {
   double totalAll = 0;
   late ProductProvider productProvider;
   late MembershipProvider membershipProvider;
+  late ViewModelPaymentMethod paymentMethodProvider;
   final TextEditingController _phoneNumberController = TextEditingController();
   late ViewModelConvertPointMember pointProvider;
 
@@ -44,6 +46,9 @@ class _CartDetailState extends State<CartDetail> {
     pointProvider.getConvertPointMembers();
     membershipProvider =
         Provider.of<MembershipProvider>(context, listen: false);
+    paymentMethodProvider =
+        Provider.of<ViewModelPaymentMethod>(context, listen: false);
+    paymentMethodProvider.getPaymentMethod();
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: ColorsCollection.WhiteNeutral,
@@ -531,429 +536,415 @@ class _CartDetailState extends State<CartDetail> {
                                                 physics:
                                                     const NeverScrollableScrollPhysics(),
                                                 children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      const SizedBox(
-                                                          height: 10),
-                                                      Center(
-                                                        child: Container(
-                                                          height: 4,
-                                                          width: 50,
-                                                          decoration: BoxDecoration(
-                                                              color: ColorsCollection
-                                                                  .GreyNeutral02,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20)),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 36),
-                                                      Text(
-                                                        "Payment method",
-                                                        style: AppTextStyles
-                                                            .titleProduct,
-                                                      ),
-                                                      const SizedBox(height: 4),
-                                                      Text(
-                                                        "Please fill in the nominal value correctly",
-                                                        style: AppTextStyles
-                                                            .subtitleStyle,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 20),
-                                                      RadioListTile(
-                                                        activeColor:
-                                                            ColorsCollection
-                                                                .PrimaryColor,
-                                                        title: Row(
-                                                          children: [
-                                                            const Icon(
-                                                              Icons
-                                                                  .payments_sharp,
-                                                              color: ColorsCollection
-                                                                  .BlackNeutral,
+                                                  Consumer<
+                                                      ViewModelPaymentMethod>(
+                                                    builder: (context,
+                                                        paymentMethodProvider,
+                                                        child) {
+                                                      return Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          Center(
+                                                            child: Container(
+                                                              height: 4,
+                                                              width: 50,
+                                                              decoration: BoxDecoration(
+                                                                  color: ColorsCollection
+                                                                      .GreyNeutral02,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20)),
                                                             ),
-                                                            const SizedBox(
-                                                                width: 10),
-                                                            Text("Cash",
-                                                                style:
-                                                                    AppTextStyles
-                                                                        .title2)
-                                                          ],
-                                                        ),
-                                                        value: 1,
-                                                        groupValue:
-                                                            _selectedRadio,
-                                                        onChanged:
-                                                            (int? value) {
-                                                          setState(() {
-                                                            _selectedRadio =
-                                                                value!;
-                                                          });
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          const DetailCashPayment()));
-                                                        },
-                                                        controlAffinity:
-                                                            ListTileControlAffinity
-                                                                .trailing,
-                                                      ),
-                                                      const Divider(
-                                                        color: ColorsCollection
-                                                            .GreyNeutral02,
-                                                        thickness: 1,
-                                                      ),
-                                                      RadioListTile(
-                                                        activeColor:
-                                                            ColorsCollection
-                                                                .PrimaryColor,
-                                                        title: Row(
-                                                          children: [
-                                                            const Icon(
-                                                              Icons
-                                                                  .qr_code_scanner,
-                                                              color: ColorsCollection
-                                                                  .BlackNeutral,
-                                                            ),
-                                                            const SizedBox(
-                                                                width: 10),
-                                                            Text("QRIS",
-                                                                style:
-                                                                    AppTextStyles
-                                                                        .title2)
-                                                          ],
-                                                        ),
-                                                        value: 2,
-                                                        groupValue:
-                                                            _selectedRadio,
-                                                        onChanged:
-                                                            (int? value) {
-                                                          setState(() {
-                                                            _selectedRadio =
-                                                                value!;
-                                                          });
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          const PaymentQris()));
-                                                        },
-                                                        controlAffinity:
-                                                            ListTileControlAffinity
-                                                                .trailing,
-                                                      ),
-                                                      const Divider(
-                                                        color: ColorsCollection
-                                                            .GreyNeutral02,
-                                                        thickness: 1,
-                                                      ),
-                                                      ListTile(
-                                                        title: Row(
-                                                          children: [
-                                                            const Icon(
-                                                              Icons.payment,
-                                                              color: ColorsCollection
-                                                                  .BlackNeutral,
-                                                            ),
-                                                            const SizedBox(
-                                                                width: 10),
-                                                            Text(
-                                                                "Transfer bank",
-                                                                style:
-                                                                    AppTextStyles
-                                                                        .title2),
-                                                          ],
-                                                        ),
-                                                        trailing: IconButton(
-                                                          constraints:
-                                                              const BoxConstraints(
-                                                                  minHeight: 24,
-                                                                  minWidth: 24),
-                                                          icon: Icon(_isExpanded
-                                                              ? Icons
-                                                                  .expand_less
-                                                              : Icons
-                                                                  .expand_more),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              _isExpanded =
-                                                                  !_isExpanded; // Toggle status ekspansi
-                                                            });
-                                                          },
-                                                        ),
-                                                      ),
-                                                      if (_isExpanded)
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 40),
-                                                          child: Column(
-                                                            children: [
-                                                              RadioListTile(
-                                                                activeColor:
-                                                                    ColorsCollection
-                                                                        .PrimaryColor,
-                                                                title: Row(
-                                                                  children: [
-                                                                    SvgPicture
-                                                                        .asset(
-                                                                      "images/bankbca.svg",
-                                                                      width: 24,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                        width:
-                                                                            10),
-                                                                    Text(
-                                                                        "Bank BCA",
-                                                                        style: AppTextStyles
-                                                                            .title2)
-                                                                  ],
-                                                                ),
-                                                                value: 3,
-                                                                groupValue:
-                                                                    _selectedRadio,
-                                                                onChanged: (int?
-                                                                    value) {
-                                                                  setState(() {
-                                                                    _selectedRadio =
-                                                                        value!;
-                                                                  });
-                                                                  Navigator.push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              const PaymentProcess()));
-                                                                },
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .trailing,
-                                                              ),
-                                                              const Divider(
-                                                                color: ColorsCollection
-                                                                    .GreyNeutral02,
-                                                                thickness: 1,
-                                                              ),
-                                                              RadioListTile(
-                                                                activeColor:
-                                                                    ColorsCollection
-                                                                        .PrimaryColor,
-                                                                title: Row(
-                                                                  children: [
-                                                                    SvgPicture.asset(
-                                                                        "images/mandiribank.svg",
-                                                                        width:
-                                                                            24),
-                                                                    const SizedBox(
-                                                                        width:
-                                                                            10),
-                                                                    Text(
-                                                                        "Bank Mandiri",
-                                                                        style: AppTextStyles
-                                                                            .title2)
-                                                                  ],
-                                                                ),
-                                                                value: 4,
-                                                                groupValue:
-                                                                    _selectedRadio,
-                                                                onChanged: (int?
-                                                                    value) {
-                                                                  setState(() {
-                                                                    _selectedRadio =
-                                                                        value!;
-                                                                  });
-                                                                },
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .trailing,
-                                                              ),
-                                                              const Divider(
-                                                                color: ColorsCollection
-                                                                    .GreyNeutral02,
-                                                                thickness: 1,
-                                                              ),
-                                                              RadioListTile(
-                                                                activeColor:
-                                                                    ColorsCollection
-                                                                        .PrimaryColor,
-                                                                title: Row(
-                                                                  children: [
-                                                                    SvgPicture.asset(
-                                                                        "images/BNLI.svg",
-                                                                        width:
-                                                                            24),
-                                                                    const SizedBox(
-                                                                        width:
-                                                                            10),
-                                                                    Text(
-                                                                        "Bank Permata",
-                                                                        style: AppTextStyles
-                                                                            .title2)
-                                                                  ],
-                                                                ),
-                                                                value: 5,
-                                                                groupValue:
-                                                                    _selectedRadio,
-                                                                onChanged: (int?
-                                                                    value) {
-                                                                  setState(() {
-                                                                    _selectedRadio =
-                                                                        value!;
-                                                                  });
-                                                                },
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .trailing,
-                                                              ),
-                                                              const Divider(
-                                                                color: ColorsCollection
-                                                                    .GreyNeutral02,
-                                                                thickness: 1,
-                                                              ),
-                                                              RadioListTile(
-                                                                activeColor:
-                                                                    ColorsCollection
-                                                                        .PrimaryColor,
-                                                                title: Row(
-                                                                  children: [
-                                                                    SvgPicture.asset(
-                                                                        "images/BBNI.svg",
-                                                                        width:
-                                                                            24),
-                                                                    const SizedBox(
-                                                                        width:
-                                                                            10),
-                                                                    Text(
-                                                                        "Bank BNI",
-                                                                        style: AppTextStyles
-                                                                            .title2)
-                                                                  ],
-                                                                ),
-                                                                value: 6,
-                                                                groupValue:
-                                                                    _selectedRadio,
-                                                                onChanged: (int?
-                                                                    value) {
-                                                                  setState(() {
-                                                                    _selectedRadio =
-                                                                        value!;
-                                                                  });
-                                                                },
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .trailing,
-                                                              ),
-                                                              const Divider(
-                                                                color: ColorsCollection
-                                                                    .GreyNeutral02,
-                                                                thickness: 1,
-                                                              ),
-                                                              RadioListTile(
-                                                                activeColor:
-                                                                    ColorsCollection
-                                                                        .PrimaryColor,
-                                                                title: Row(
-                                                                  children: [
-                                                                    SvgPicture.asset(
-                                                                        "images/BBRI.svg",
-                                                                        width:
-                                                                            24),
-                                                                    const SizedBox(
-                                                                        width:
-                                                                            10),
-                                                                    Text(
-                                                                        "Bank BRI",
-                                                                        style: AppTextStyles
-                                                                            .title2)
-                                                                  ],
-                                                                ),
-                                                                value: 7,
-                                                                groupValue:
-                                                                    _selectedRadio,
-                                                                onChanged: (int?
-                                                                    value) {
-                                                                  setState(() {
-                                                                    _selectedRadio =
-                                                                        value!;
-                                                                  });
-                                                                },
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .trailing,
-                                                              ),
-                                                              const Divider(
-                                                                color: ColorsCollection
-                                                                    .GreyNeutral02,
-                                                                thickness: 1,
-                                                              ),
-                                                              RadioListTile(
-                                                                activeColor:
-                                                                    ColorsCollection
-                                                                        .PrimaryColor,
-                                                                title: Row(
-                                                                  children: [
-                                                                    const Icon(
-                                                                      Icons
-                                                                          .account_balance,
-                                                                      color: ColorsCollection
-                                                                          .BlackNeutral,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                        width:
-                                                                            10),
-                                                                    Text(
-                                                                        "Other Bank",
-                                                                        style: AppTextStyles
-                                                                            .title2)
-                                                                  ],
-                                                                ),
-                                                                value: 8,
-                                                                groupValue:
-                                                                    _selectedRadio,
-                                                                onChanged: (int?
-                                                                    value) {
-                                                                  setState(() {
-                                                                    _selectedRadio =
-                                                                        value!;
-                                                                  });
-                                                                },
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .trailing,
-                                                              ),
-                                                            ],
                                                           ),
-                                                        ),
-                                                      const SizedBox(
-                                                          height: 20),
-                                                      CustomButton(
-                                                        text: "Choose",
-                                                        onPressed: () {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        const CartDetail()),
-                                                          );
-                                                        },
-                                                        buttonType:
-                                                            ButtonType.filled,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 20),
-                                                    ],
+                                                          const SizedBox(
+                                                              height: 36),
+                                                          Text(
+                                                            "Payment method",
+                                                            style: AppTextStyles
+                                                                .titleProduct,
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 4),
+                                                          Text(
+                                                            "Please fill in the nominal value correctly",
+                                                            style: AppTextStyles
+                                                                .subtitleStyle,
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 20),
+                                                          RadioListTile(
+                                                            activeColor:
+                                                                ColorsCollection
+                                                                    .PrimaryColor,
+                                                            title: Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons
+                                                                      .payments_sharp,
+                                                                  color: ColorsCollection
+                                                                      .BlackNeutral,
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 10),
+                                                                Text(
+                                                                    "${paymentMethodProvider.paymentMethod?.results[0].name}",
+                                                                    style: AppTextStyles
+                                                                        .title2)
+                                                              ],
+                                                            ),
+                                                            value: 1,
+                                                            groupValue:
+                                                                _selectedRadio,
+                                                            onChanged:
+                                                                (int? value) {
+                                                              setState(() {
+                                                                _selectedRadio =
+                                                                    value!;
+                                                              });
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              const DetailCashPayment()));
+                                                            },
+                                                            controlAffinity:
+                                                                ListTileControlAffinity
+                                                                    .trailing,
+                                                          ),
+                                                          const Divider(
+                                                            color: ColorsCollection
+                                                                .GreyNeutral02,
+                                                            thickness: 1,
+                                                          ),
+                                                          RadioListTile(
+                                                            activeColor:
+                                                                ColorsCollection
+                                                                    .PrimaryColor,
+                                                            title: Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons
+                                                                      .qr_code_scanner,
+                                                                  color: ColorsCollection
+                                                                      .BlackNeutral,
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 10),
+                                                                Text(
+                                                                    "${paymentMethodProvider.paymentMethod?.results[1].name}",
+                                                                    style: AppTextStyles
+                                                                        .title2)
+                                                              ],
+                                                            ),
+                                                            value: 2,
+                                                            groupValue:
+                                                                _selectedRadio,
+                                                            onChanged:
+                                                                (int? value) {
+                                                              setState(() {
+                                                                _selectedRadio =
+                                                                    value!;
+                                                              });
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              const PaymentQris()));
+                                                            },
+                                                            controlAffinity:
+                                                                ListTileControlAffinity
+                                                                    .trailing,
+                                                          ),
+                                                          const Divider(
+                                                            color: ColorsCollection
+                                                                .GreyNeutral02,
+                                                            thickness: 1,
+                                                          ),
+                                                          ListTile(
+                                                            title: Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons.payment,
+                                                                  color: ColorsCollection
+                                                                      .BlackNeutral,
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 10),
+                                                                Text(
+                                                                    "Transfer bank",
+                                                                    style: AppTextStyles
+                                                                        .title2),
+                                                              ],
+                                                            ),
+                                                            trailing:
+                                                                IconButton(
+                                                              constraints:
+                                                                  const BoxConstraints(
+                                                                      minHeight:
+                                                                          24,
+                                                                      minWidth:
+                                                                          24),
+                                                              icon: Icon(_isExpanded
+                                                                  ? Icons
+                                                                      .expand_less
+                                                                  : Icons
+                                                                      .expand_more),
+                                                              onPressed: () {
+                                                                setState(() {
+                                                                  _isExpanded =
+                                                                      !_isExpanded; // Toggle status ekspansi
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                          if (_isExpanded)
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 40),
+                                                              child: Column(
+                                                                children: [
+                                                                  RadioListTile(
+                                                                    activeColor:
+                                                                        ColorsCollection
+                                                                            .PrimaryColor,
+                                                                    title: Row(
+                                                                      children: [
+                                                                        SvgPicture
+                                                                            .asset(
+                                                                          "images/bankbca.svg",
+                                                                          width:
+                                                                              24,
+                                                                        ),
+                                                                        const SizedBox(
+                                                                            width:
+                                                                                10),
+                                                                        Text(
+                                                                            "Bank ${paymentMethodProvider.paymentMethod?.results[2].name}",
+                                                                            style:
+                                                                                AppTextStyles.title2)
+                                                                      ],
+                                                                    ),
+                                                                    value: 4,
+                                                                    groupValue:
+                                                                        _selectedRadio,
+                                                                    onChanged: (int?
+                                                                        value) {
+                                                                      setState(
+                                                                          () {
+                                                                        _selectedRadio =
+                                                                            value!;
+                                                                      });
+                                                                      Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) => const PaymentProcess()));
+                                                                    },
+                                                                    controlAffinity:
+                                                                        ListTileControlAffinity
+                                                                            .trailing,
+                                                                  ),
+                                                                  const Divider(
+                                                                    color: ColorsCollection
+                                                                        .GreyNeutral02,
+                                                                    thickness:
+                                                                        1,
+                                                                  ),
+                                                                  RadioListTile(
+                                                                    activeColor:
+                                                                        ColorsCollection
+                                                                            .PrimaryColor,
+                                                                    title: Row(
+                                                                      children: [
+                                                                        SvgPicture.asset(
+                                                                            "images/cimbbank.svg",
+                                                                            width:
+                                                                                24),
+                                                                        const SizedBox(
+                                                                            width:
+                                                                                10),
+                                                                        Text(
+                                                                            "Bank ${paymentMethodProvider.paymentMethod?.results[3].name}",
+                                                                            style:
+                                                                                AppTextStyles.title2)
+                                                                      ],
+                                                                    ),
+                                                                    value: 7,
+                                                                    groupValue:
+                                                                        _selectedRadio,
+                                                                    onChanged: (int?
+                                                                        value) {
+                                                                      setState(
+                                                                          () {
+                                                                        _selectedRadio =
+                                                                            value!;
+                                                                      });
+                                                                    },
+                                                                    controlAffinity:
+                                                                        ListTileControlAffinity
+                                                                            .trailing,
+                                                                  ),
+                                                                  const Divider(
+                                                                    color: ColorsCollection
+                                                                        .GreyNeutral02,
+                                                                    thickness:
+                                                                        1,
+                                                                  ),
+                                                                  RadioListTile(
+                                                                    activeColor:
+                                                                        ColorsCollection
+                                                                            .PrimaryColor,
+                                                                    title: Row(
+                                                                      children: [
+                                                                        SvgPicture.asset(
+                                                                            "images/BNLI.svg",
+                                                                            width:
+                                                                                24),
+                                                                        const SizedBox(
+                                                                            width:
+                                                                                10),
+                                                                        Text(
+                                                                            "Bank ${paymentMethodProvider.paymentMethod?.results[4].name}",
+                                                                            style:
+                                                                                AppTextStyles.title2)
+                                                                      ],
+                                                                    ),
+                                                                    value: 3,
+                                                                    groupValue:
+                                                                        _selectedRadio,
+                                                                    onChanged: (int?
+                                                                        value) {
+                                                                      setState(
+                                                                          () {
+                                                                        _selectedRadio =
+                                                                            value!;
+                                                                      });
+                                                                    },
+                                                                    controlAffinity:
+                                                                        ListTileControlAffinity
+                                                                            .trailing,
+                                                                  ),
+                                                                  const Divider(
+                                                                    color: ColorsCollection
+                                                                        .GreyNeutral02,
+                                                                    thickness:
+                                                                        1,
+                                                                  ),
+                                                                  RadioListTile(
+                                                                    activeColor:
+                                                                        ColorsCollection
+                                                                            .PrimaryColor,
+                                                                    title: Row(
+                                                                      children: [
+                                                                        SvgPicture.asset(
+                                                                            "images/BBNI.svg",
+                                                                            width:
+                                                                                24),
+                                                                        const SizedBox(
+                                                                            width:
+                                                                                10),
+                                                                        Text(
+                                                                            "Bank ${paymentMethodProvider.paymentMethod?.results[5].name}",
+                                                                            style:
+                                                                                AppTextStyles.title2)
+                                                                      ],
+                                                                    ),
+                                                                    value: 6,
+                                                                    groupValue:
+                                                                        _selectedRadio,
+                                                                    onChanged: (int?
+                                                                        value) {
+                                                                      setState(
+                                                                          () {
+                                                                        _selectedRadio =
+                                                                            value!;
+                                                                      });
+                                                                    },
+                                                                    controlAffinity:
+                                                                        ListTileControlAffinity
+                                                                            .trailing,
+                                                                  ),
+                                                                  const Divider(
+                                                                    color: ColorsCollection
+                                                                        .GreyNeutral02,
+                                                                    thickness:
+                                                                        1,
+                                                                  ),
+                                                                  RadioListTile(
+                                                                    activeColor:
+                                                                        ColorsCollection
+                                                                            .PrimaryColor,
+                                                                    title: Row(
+                                                                      children: [
+                                                                        SvgPicture.asset(
+                                                                            "images/BBRI.svg",
+                                                                            width:
+                                                                                24),
+                                                                        const SizedBox(
+                                                                            width:
+                                                                                10),
+                                                                        Text(
+                                                                            "Bank ${paymentMethodProvider.paymentMethod?.results[6].name}",
+                                                                            style:
+                                                                                AppTextStyles.title2)
+                                                                      ],
+                                                                    ),
+                                                                    value: 5,
+                                                                    groupValue:
+                                                                        _selectedRadio,
+                                                                    onChanged: (int?
+                                                                        value) {
+                                                                      setState(
+                                                                          () {
+                                                                        _selectedRadio =
+                                                                            value!;
+                                                                      });
+                                                                    },
+                                                                    controlAffinity:
+                                                                        ListTileControlAffinity
+                                                                            .trailing,
+                                                                  ),
+                                                                  const Divider(
+                                                                    color: ColorsCollection
+                                                                        .GreyNeutral02,
+                                                                    thickness:
+                                                                        1,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          const SizedBox(
+                                                              height: 20),
+                                                          CustomButton(
+                                                            text: "Choose",
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            const CartDetail()),
+                                                              );
+                                                            },
+                                                            buttonType:
+                                                                ButtonType
+                                                                    .filled,
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 20),
+                                                        ],
+                                                      );
+                                                    },
                                                   ),
                                                 ],
                                               ),

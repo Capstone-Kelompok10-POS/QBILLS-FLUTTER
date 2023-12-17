@@ -10,5 +10,5 @@ class Url {
   static const String MembershipPhoneNumberUrl =
       "/api/v1/membership/phone-number/";
   static const String PointMemberUrl = "/api/v1/convert/points";
-  static const String payamentMethod = "/api/v1/payment/method/";
+  static const String PaymentMethod = "/api/v1/payment/method/";
 }

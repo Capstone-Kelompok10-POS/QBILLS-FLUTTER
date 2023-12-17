@@ -124,7 +124,7 @@ class _PaymentQrisState extends State<PaymentQris> {
                                         style: AppTextStyles.titleStyleBlack),
                                   ],
                                 ),
-                                const SizedBox(height: 36),
+                                const SizedBox(height: 30),
                                 Image.asset("images/QRcode.png", width: 200),
                                 const SizedBox(height: 20),
                                 Text('Scan to Pay',
