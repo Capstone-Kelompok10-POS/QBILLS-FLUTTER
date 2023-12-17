@@ -214,10 +214,14 @@ class _CartDetailState extends State<CartDetail> {
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
-                                                (value.cartItems[index].price *
-                                                        value.cartItems[index]
-                                                            .amount)
-                                                    .toString(),
+                                                'Rp. ' +
+                                                    (value.cartItems[index]
+                                                                .price *
+                                                            value
+                                                                .cartItems[
+                                                                    index]
+                                                                .amount)
+                                                        .toString(),
                                                 style: AppTextStyles
                                                     .subtitleStyleBlack),
                                             const SizedBox(height: 10),
