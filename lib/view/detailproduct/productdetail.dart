@@ -28,7 +28,7 @@ class CoffeeSize {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final listSize = <CoffeeSize>[];
 
-  var idSelected = 1;
+  dynamic idSelected;
   int quantity = 1;
   double totalPrice = 0;
   bool isChoice = false;
@@ -49,7 +49,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     data = widget.data;
     datadetail = widget.data.productDetail;
     for (int i = 0; i < datadetail.length; i++) {
-      listSize.add(CoffeeSize(i, "images/cup.png", datadetail[i].size, "_"));
+      listSize.add(CoffeeSize(
+          datadetail[i].id, "images/cup.png", datadetail[i].size, "_"));
     }
     setState(() {});
     totalPrice = data.productDetail[0].price * quantity.toDouble();
@@ -205,12 +206,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15, vertical: 10),
                                     avatar: Image.asset(
-                                        height: 30,
-                                        width: 30,
-                                        isChoice ? e.imgPath : e.imgPath,
-                                        color: isChoice
-                                            ? ColorsCollection.WhiteNeutral
-                                            : ColorsCollection.BlackNeutral),
+                                      height: 30,
+                                      width: 30,
+                                      e.imgPath,
+                                      color: idSelected == e.id
+                                          ? ColorsCollection.WhiteNeutral
+                                          : ColorsCollection.BlackNeutral,
+                                    ),
                                     selectedColor:
                                         ColorsCollection.PrimaryColor,
                                     side: const BorderSide(
@@ -227,7 +229,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           style: GoogleFonts.openSans(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
-                                            color: isChoice
+                                            color: idSelected == e.id
                                                 ? ColorsCollection.WhiteNeutral
                                                 : ColorsCollection.BlackNeutral,
                                           ),
@@ -237,29 +239,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           style: GoogleFonts.openSans(
                                             fontWeight: FontWeight.normal,
                                             fontSize: 12,
-                                            color: isChoice
+                                            color: idSelected == e.id
                                                 ? ColorsCollection.WhiteNeutral
                                                 : ColorsCollection.GreyNeutral,
                                           ),
                                         )
                                       ],
                                     ),
-                                    // selected: idSelected == e.id,
-                                    selected: isChoice,
-                                    onSelected: (value) => setState(() {
-                                      print(isChoice);
-                                      isChoice = value;
-                                      sizeSelected = e.sizing;
-                                      if (idSelected == e.id) {
-                                        idSelected = 0;
-                                      } else {
-                                        idSelected = e.id;
-                                      }
-                                    }),
+                                    selected: idSelected == e.id,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        if (value) {
+                                          idSelected = e.id;
+                                        } else {
+                                          idSelected = null;
+                                        }
+                                      });
+                                    },
                                   ),
                                 )
                                 .toList(),
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -340,8 +340,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   onTap: () {
                                     setState(() {
                                       setState(() {
-                                        quantity++; // Increase quantity
-                                        updateTotalPrice(); // Update total price
+                                        quantity++;
+                                        updateTotalPrice();
                                       });
                                     });
                                   },
@@ -372,12 +372,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         onPressed: () {
                           print(idSelected);
                           print(isChoice);
-                          if (!isChoice) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Size Belum Dipilih")));
-                            return;
-                          }
+                          // if (!isChoice) {
+                          //   ScaffoldMessenger.of(context).showSnackBar(
+                          //       const SnackBar(
+                          //           content: Text("Size Belum Dipilih")));
+                          //   return;
+                          // }
                           value.addToCartItem(
                               data.id.toString(),
                               data.image,

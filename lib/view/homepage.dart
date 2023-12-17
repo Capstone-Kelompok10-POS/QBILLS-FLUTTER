@@ -48,6 +48,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    productProvider = Provider.of<ProductProvider>(context, listen: false);
+    loginViewmodel = Provider.of<LoginVM>(context, listen: false);
+    productProvider.getProducts();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
         context: context,
@@ -60,9 +63,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    productProvider = Provider.of<ProductProvider>(context, listen: false);
-    loginViewmodel = Provider.of<LoginVM>(context, listen: false);
-    productProvider.getProducts();
     return Consumer<ProductProvider>(
       builder: (context, value, child) => Scaffold(
           key: _drawerKey,
