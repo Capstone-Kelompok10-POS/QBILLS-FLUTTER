@@ -22,8 +22,6 @@ class MembershipProvider with ChangeNotifier {
 
   Future<void> getMembers() async {
     try {
-      isLoading = true;
-      notifyListeners();
       membershipModel = await services.getMembers();
       notifyListeners();
       print(membershipModel!.results.length);
@@ -77,18 +75,20 @@ class MembershipProvider with ChangeNotifier {
               result.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
       _isSearching = true;
-      notifyListeners();
     } else {
       _filteredResults.clear();
       _isSearching = false;
     }
 
+    // Panggil notifyListeners() setelah kondisi sudah ditetapkan
     notifyListeners();
   }
 
   void clearSearch() {
     _filteredResults.clear();
     _isSearching = false;
+
+    // Panggil notifyListeners() setelah kondisi sudah ditetapkan
     notifyListeners();
   }
 }

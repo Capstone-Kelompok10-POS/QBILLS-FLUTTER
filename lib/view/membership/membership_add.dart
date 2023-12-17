@@ -1,17 +1,35 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:pos_capstone/constant/button/button_collection.dart';
 import 'package:pos_capstone/constant/colors/colors.dart';
 import 'package:pos_capstone/constant/textfield/textfield.dart';
 import 'package:pos_capstone/constant/textstyle/textstyle.dart';
-
 import 'package:pos_capstone/viewmodel/view_model_add_membership.dart';
+import 'package:pos_capstone/viewmodel/view_model_product.dart';
+import 'package:provider/provider.dart';
 
-class MembershipScreen extends StatelessWidget {
+class MembershipScreen extends StatefulWidget {
+  MembershipScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MembershipScreen> createState() => _MembershipScreenState();
+}
+
+class _MembershipScreenState extends State<MembershipScreen> {
   final TextEditingController nameController = TextEditingController();
+
   final TextEditingController phoneController = TextEditingController();
+
   final MembershipViewModel membershipService = MembershipViewModel();
 
-  MembershipScreen({Key? key}) : super(key: key);
+  late ProductProvider productProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    productProvider = Provider.of<ProductProvider>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +86,7 @@ class MembershipScreen extends StatelessWidget {
                           nameController.text,
                           phoneController.text,
                         );
-                        Navigator.pop(context);
+                        productProvider.indexPage1(context, 2);
                       }
                     },
                     buttonType: ButtonType.filled,
