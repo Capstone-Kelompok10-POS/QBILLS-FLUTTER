@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pos_capstone/constant/button/button_collection.dart';
@@ -26,6 +24,7 @@ class _CartDetailState extends State<CartDetail> {
   bool _isExpanded = false;
   late int amount = 1;
   double totalPrice = 0;
+  double totalAll = 0;
   late ProductProvider productProvider;
   late MembershipProvider membershipProvider;
   final TextEditingController _phoneNumberController = TextEditingController();
@@ -87,7 +86,7 @@ class _CartDetailState extends State<CartDetail> {
                         const SizedBox(
                           height: 20,
                         ),
-                        Text('Search membership',
+                        Text('Search Membership',
                             style: AppTextStyles.titleProduct),
                         const SizedBox(height: 10),
                         SizedBox(
@@ -483,6 +482,8 @@ class _CartDetailState extends State<CartDetail> {
                                 builder: (context, value, _) {
                               int totalDiscount = value
                                   .getValuePoint(pointProvider.selectedValue);
+                              double totalAll = (totalPrice - totalDiscount) +
+                                  (totalPrice * 0.10);
                               return Expanded(
                                 child: SizedBox(
                                   child: Column(
@@ -494,7 +495,7 @@ class _CartDetailState extends State<CartDetail> {
                                         style: AppTextStyles.subtitleStyleBlack,
                                       ),
                                       Text(
-                                        "Rp. ${(totalPrice - totalDiscount) + (totalPrice * 0.10)}",
+                                        "Rp. $totalAll",
                                         style: AppTextStyles.titleStyleBlack,
                                       )
                                     ],
