@@ -12,7 +12,7 @@ class ViewModelPaymentMethod with ChangeNotifier {
   Future<void> getPaymentMethod() async {
     try {
       isLoading = true;
-      notifyListeners(); // Pembaruan status loading diinisiasi
+      // Pembaruan status loading diinisiasi
       paymentMethod = await services.getPaymentMethods();
     } catch (e) {
       if (e is DioError) {

@@ -722,7 +722,7 @@ class _CartDetailState extends State<CartDetail> {
                                                                       children: [
                                                                         SvgPicture
                                                                             .asset(
-                                                                          "images/bankbca.svg",
+                                                                          "images/BNLI.svg",
                                                                           width:
                                                                               24,
                                                                         ),
@@ -767,7 +767,7 @@ class _CartDetailState extends State<CartDetail> {
                                                                     title: Row(
                                                                       children: [
                                                                         SvgPicture.asset(
-                                                                            "images/cimbbank.svg",
+                                                                            "images/bankbca.svg",
                                                                             width:
                                                                                 24),
                                                                         const SizedBox(
@@ -807,7 +807,7 @@ class _CartDetailState extends State<CartDetail> {
                                                                     title: Row(
                                                                       children: [
                                                                         SvgPicture.asset(
-                                                                            "images/BNLI.svg",
+                                                                            "images/BBRI.svg",
                                                                             width:
                                                                                 24),
                                                                         const SizedBox(
@@ -887,7 +887,7 @@ class _CartDetailState extends State<CartDetail> {
                                                                     title: Row(
                                                                       children: [
                                                                         SvgPicture.asset(
-                                                                            "images/BBRI.svg",
+                                                                            "images/cimbbank.svg",
                                                                             width:
                                                                                 24),
                                                                         const SizedBox(
@@ -914,17 +914,11 @@ class _CartDetailState extends State<CartDetail> {
                                                                         ListTileControlAffinity
                                                                             .trailing,
                                                                   ),
-                                                                  const Divider(
-                                                                    color: ColorsCollection
-                                                                        .GreyNeutral02,
-                                                                    thickness:
-                                                                        1,
-                                                                  ),
                                                                 ],
                                                               ),
                                                             ),
                                                           const SizedBox(
-                                                              height: 20),
+                                                              height: 80),
                                                           CustomButton(
                                                             text: "Choose",
                                                             onPressed: () {
