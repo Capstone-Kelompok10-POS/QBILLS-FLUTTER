@@ -570,7 +570,7 @@ class _CartDetailState extends State<CartDetail> {
                                                           const SizedBox(
                                                               height: 36),
                                                           Text(
-                                                            "Payment method",
+                                                            "Payment Method",
                                                             style: AppTextStyles
                                                                 .titleProduct,
                                                           ),
@@ -684,7 +684,7 @@ class _CartDetailState extends State<CartDetail> {
                                                                 const SizedBox(
                                                                     width: 10),
                                                                 Text(
-                                                                    "Transfer bank",
+                                                                    "Transfer Bank",
                                                                     style: AppTextStyles
                                                                         .title2),
                                                               ],
@@ -922,7 +922,7 @@ class _CartDetailState extends State<CartDetail> {
                                                               ),
                                                             ),
                                                           const SizedBox(
-                                                              height: 80),
+                                                              height: 30),
                                                           CustomButton(
                                                             text: "Choose",
                                                             onPressed: () {
